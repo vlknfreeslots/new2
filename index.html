@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>VLKN</title>
   
-  <!-- Встроенный резервный редирект на случай отключенного JS в браузере -->
-  <meta http-equiv="refresh" content="5;url=https://github.io">
+  <!-- Резервный автоматический редирект на указанный сайт -->
+  <meta http-equiv="refresh" content="5;url=https://vlknfreeslots.github.io/new/">
 
   <style>
-    /* Гарантированный сброс всех отступов браузера для полноэкранного режима */
+    /* Полный сброс отступов браузера для отображения строго на весь экран */
     html, body {
       margin: 0 !important;
       padding: 0 !important;
@@ -19,7 +19,7 @@
       overflow: hidden;
     }
 
-    /* Главный контейнер заставки */
+    /* Главный полноэкранный контейнер заставки */
     .wrapper {
       position: fixed;
       top: 0;
@@ -36,12 +36,12 @@
       font-family: Arial, sans-serif;
     }
 
-    /* Блок бренда */
+    /* Блок логотипа и индикатора */
     .brand-box {
       text-align: center;
       color: #ffffff;
       width: 100%;
-      max-width: 320px; /* Ограничение ширины для мобильных устройств */
+      max-width: 320px;
       padding: 20px;
       box-sizing: border-box;
     }
@@ -65,7 +65,7 @@
       font-weight: bold;
     }
 
-    /* КОНТЕЙНЕР ЛИНИИ ЗАГРУЗКИ (Серый фон под трек) */
+    /* Трек индикатора загрузки */
     .progress-container {
       width: 100%;
       height: 6px;
@@ -74,18 +74,17 @@
       overflow: hidden;
     }
 
-    /* САМА ЛИНИЯ ЗАГРУЗКИ (Заполняющаяся часть) */
+    /* Заполняющаяся линия (анимация ровно на 5 секунд) */
     .progress-bar {
-      width: 0%; /* Стартует с нуля */
+      width: 0%;
       height: 100%;
       background: linear-gradient(90deg, #7f00ff, #ff007f);
       border-radius: 10px;
       box-shadow: 0 0 10px #ff007f;
-      /* Плавная CSS-анимация заполнения ровно на 5 секунд */
       animation: fillProgress 5s linear forwards; 
     }
 
-    /* CSS анимация для полосы загрузки */
+    /* Описание анимации движения линии */
     @keyframes fillProgress {
       0% { width: 0%; }
       100% { width: 100%; }
@@ -96,11 +95,11 @@
 
   <div class="wrapper">
     <div class="brand-box">
-      <!-- Логотип проекта -->
+      <!-- Название бренда -->
       <h1 class="title">VLKN</h1>
       <p class="subtitle">FREE SLOTS</p>
       
-      <!-- Только индикатор загрузки -->
+      <!-- Индикатор загрузки -->
       <div class="progress-container">
         <div class="progress-bar"></div>
       </div>
@@ -108,9 +107,9 @@
   </div>
 
   <script>
-    // Автоматический перенаправление ровно через 5 секунд (5000 миллисекунд)
+    // Основной автоматический переход через 5 секунд (5000 миллисекунд)
     setTimeout(function() {
-      window.location.replace("https://github.io");
+      window.location.replace("https://vlknfreeslots.github.io/new/");
     }, 5000);
   </script>
 
