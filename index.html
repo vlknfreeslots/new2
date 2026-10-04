@@ -24,13 +24,8 @@
     }
     
     @keyframes destroyLoaderFully {
-      0% {
-        opacity: 1;
-      }
-      100% {
-        opacity: 0;
-        visibility: hidden;
-      }
+      0% { opacity: 1; }
+      100% { opacity: 0; visibility: hidden; }
     }
 
     .loader-logo {
@@ -66,8 +61,6 @@
     .balance-amount { color: #00ffcc; font-size: 1.4rem; font-weight: bold; text-shadow: 0 0 10px rgba(0, 255, 204, 0.4); }
     
     .bet-control { display: flex; align-items: center; gap: 10px; margin-top: 2px; }
-    
-    /* Добавлены ID для безопасного поиска кнопок */
     .bet-btn { background: #1f2833; border: 1px solid #00d2ff; color: #00d2ff; font-weight: bold; font-size: 1.2rem; width: 30px; height: 30px; border-radius: 5px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
     .bet-btn:hover { background: #00d2ff; color: #1f2833; }
     .bet-amount { font-size: 1.3rem; min-width: 50px; font-weight: bold; }
@@ -108,7 +101,6 @@
     <div class="panel-box">
       <div class="panel-label">Ставка</div>
       <div class="bet-control">
-        <!-- Убраны старые атрибуты onclick, добавлены понятные ID -->
         <button class="bet-btn" id="btnBetMinus">-</button>
         <span id="betDisplay" class="bet-amount">100</span>
         <button class="bet-btn" id="btnBetPlus">+</button>
@@ -122,7 +114,6 @@
     <div class="reel" id="reel3">💎</div>
   </div>
 
-  <!-- Убран атрибут onclick -->
   <button id="spinBtn" class="spin-btn">Испытать удачу</button>
   <p id="message"></p>
 
@@ -136,12 +127,10 @@
   </div>
 
   <script>
-    // ГАРАНТИРОВАННОЕ ФИЗИЧЕСКОЕ УДАЛЕНИЕ ЗАСТАВКИ
+    // Гарантированно полностью стираем заставку из HTML
     setTimeout(function() {
       var loader = document.getElementById('loader');
-      if (loader) {
-        loader.remove(); // Полностью стираем элемент из HTML-кода, чтобы его не было физически
-      }
+      if (loader) { loader.remove(); }
     }, 3300);
 
     const symbols = ['🍒', '🍋', '🍇', '🍉', '⭐', '💎'];
@@ -253,3 +242,10 @@
           }
         }
       } else if (s1 === s2 || s2 === s3 || s1 === s3) {
+        winAmount = Math.floor(currentBet * 1.5);
+        balance += winAmount;
+        if (msg) {
+          msg.innerText = `👍 Неплохо! Выигрыш: +${winAmount} 🪙`;
+          msg.style.color = "#00ffcc";
+          msg.style.textShadow = "0 0 10px rgba(0, 255, 204, 0.4)";
+        }
