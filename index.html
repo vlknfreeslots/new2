@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>VLKN: free slots</title>
   <style>
-    /* НЕУБИВАЕМАЯ ЗАСТАВКА НА ЧИСТОМ CSS (БЕЗ JAVASCRIPT) */
+    /* АБСОЛЮТНО АВТОНОМНАЯ CSS-ЗАСТАВКА (БЕЗ JS) */
     #loader {
       position: fixed;
       top: 0;
@@ -19,24 +19,25 @@
       align-items: center;
       z-index: 999999;
       
-      /* Анимация: ждем 3 секунды, затем 0.5 секунды плавно исчезаем */
-      animation: fadeOutOnly 0.5s ease 3s forwards;
-      /* Отключаем перехват кликов мыши сразу после исчезновения заставки */
-      pointer-events: none; 
+      /* Запускаем анимацию: 3 секунды держим экран, затем 0.4 секунды плавно растворяем и убираем */
+      animation: destroyLoader 0.4s ease 3s forwards;
     }
     
-    @keyframes fadeOutOnly {
+    @keyframes destroyLoader {
       0% {
         opacity: 1;
-        visibility: visible;
+        transform: scale(1);
+        z-index: 999999;
       }
       99% {
         opacity: 0;
-        visibility: visible;
+        transform: scale(1);
+        z-index: 999999;
       }
       100% {
         opacity: 0;
-        visibility: hidden; /* Полностью прячем заставку от кликов */
+        transform: scale(0); /* Схлопываем заставку в нулевой размер */
+        z-index: -1;        /* Уводим её на самый задний план под игру */
       }
     }
 
@@ -146,7 +147,7 @@
     const minBet = 100;
     let isSpinning = false;
     
-    // Прямая моментальная инициализация цифр без оберток
+    // Инициализация стартовых значений
     document.getElementById('balance').innerText = balance + " 🪙";
     document.getElementById('betDisplay').innerText = currentBet;
 
@@ -250,4 +251,3 @@
             msg.style.color = "#ffaa00";
             msg.style.textShadow = "0 0 15px #ffaa00";
           }
-        }
