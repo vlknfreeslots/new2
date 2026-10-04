@@ -90,16 +90,18 @@
 
     function playTone(freq, type, duration, startTime = 0) {
       if (!audioCtx) return;
-      const osc = audioCtx.createOscillator();
-      const gainNode = audioCtx.createGain();
-      osc.type = type;
-      osc.frequency.setValueAtTime(freq, audioCtx.currentTime + startTime);
-      gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime + startTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + startTime + duration);
-      osc.connect(gainNode);
-      gainNode.connect(audioCtx.destination);
-      osc.start(audioCtx.currentTime + startTime);
-      osc.stop(audioCtx.currentTime + startTime + duration);
+      try {
+        const osc = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime + startTime);
+        gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime + startTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + startTime + duration);
+        osc.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        osc.start(audioCtx.currentTime + startTime);
+        osc.stop(audioCtx.currentTime + startTime + duration);
+      } catch(e) { console.log(e); }
     }
 
     function playWinSound() {
@@ -134,16 +136,14 @@
     function updateDisplay() {
       const balanceEl = document.getElementById('balance');
       const betEl = document.getElementById('betDisplay');
-      if (balanceEl && betEl) {
-        balanceEl.innerText = balance + " 🪙";
-        betEl.innerText = currentBet;
-      }
+      if (balanceEl) balanceEl.innerText = balance + " 🪙";
+      if (betEl) betEl.innerText = currentBet;
     }
 
     function adjustBet(amount) {
       if (isSpinning) return;
       initAudio();
-      if (audioCtx) playTickSound();
+      playTickSound();
       let newBet = currentBet + amount;
       if (newBet >= minBet && newBet <= maxBet) {
         currentBet = newBet;
@@ -156,7 +156,7 @@
       initAudio();
       
       if (balance < currentBet) {
-        if (confirm("У вас недостаточно монет для этой ставки! Получить 10 000 бесплатно?")) {
+        if (confirm("У вас недостаточно монет! Получить 10 000 бесплатно?")) {
           balance = 10000;
           updateDisplay();
           document.getElementById('message').innerText = "Баланс пополнен!";
@@ -169,10 +169,15 @@
       updateDisplay();
       
       isSpinning = true;
-      document.getElementById('spinBtn').disabled = true;
-      document.getElementById('message').innerText = "Вращение...";
-      document.getElementById('message').style.color = "#c9d1d9";
-      document.getElementById('message').style.textShadow = "none";
+      const spinBtn = document.getElementById('spinBtn');
+      if (spinBtn) spinBtn.disabled = true;
+      
+      const msg = document.getElementById('message');
+      if (msg) {
+        msg.innerText = "Вращение...";
+        msg.style.color = "#c9d1d9";
+        msg.style.textShadow = "none";
+      }
       
       let count = 0;
       const interval = setInterval(() => {
@@ -184,7 +189,7 @@
         document.getElementById('reel2').innerText = s2;
         document.getElementById('reel3').innerText = s3;
         
-        if (audioCtx) playTickSound();
+        playTickSound();
         
         count++;
         if (count > 12) { 
@@ -197,7 +202,8 @@
     function checkWin(s1, s2, s3) {
       const msg = document.getElementById('message');
       isSpinning = false;
-      document.getElementById('spinBtn').disabled = false;
+      const spinBtn = document.getElementById('spinBtn');
+      if (spinBtn) spinBtn.disabled = false;
       let winAmount = 0;
 
       if (s1 === s2 && s2 === s3) {
@@ -209,23 +215,21 @@
         winAmount = currentBet * multiplier;
         balance += winAmount;
 
-        if (s1 === '💎') {
-          msg.innerText = `🎰 МЕГА ДЖЕКПОТ! +${winAmount} 🪙`;
-          msg.style.color = "#00ffcc";
-          msg.style.textShadow = "0 0 20px #00ffcc, 0 0 30px #ff00ff";
-          playJackpotSound();
-        } else {
-          msg.innerText = `🎉 КОМБО! +${winAmount} 🪙`;
-          msg.style.color = "#ffaa00";
-          msg.style.textShadow = "0 0 15px #ffaa00";
-          playWinSound();
+        if (msg) {
+          if (s1 === '💎') {
+            msg.innerText = `🎰 МЕГА ДЖЕКПОТ! +${winAmount} 🪙`;
+            msg.style.color = "#00ffcc";
+            msg.style.textShadow = "0 0 20px #00ffcc, 0 0 30px #ff00ff";
+            playJackpotSound();
+          } else {
+            msg.innerText = `🎉 КОМБО! +${winAmount} 🪙`;
+            msg.style.color = "#ffaa00";
+            msg.style.textShadow = "0 0 15px #ffaa00";
+            playWinSound();
+          }
         }
       } else if (s1 === s2 || s2 === s3 || s1 === s3) {
         winAmount = Math.floor(currentBet * 1.5);
         balance += winAmount;
-        msg.innerText = `✨ Выигрыш! +${winAmount} 🪙`;
-        msg.style.color = "#ffdd00";
-        msg.style.textShadow = "0 0 10px #ffdd00";
-        playWinSound();
-      } else {
-        msg.innerText = `Увы, попробуйте еще раз!`;
+        if (msg) {
+          msg.innerText = `✨ Выигрыш! +${winAmount} 🪙`;
