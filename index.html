@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>VLKN: free slots</title>
   <style>
-    /* АБСОЛЮТНО ОТКАЗОУСТОЙЧИВАЯ CSS-ЗАСТАВКА */
+    /* НЕОНОВАЯ ЗАСТАВКА ЗАГРУЗКИ */
     #loader {
       position: fixed;
       top: 0;
@@ -18,16 +18,9 @@
       justify-content: center;
       align-items: center;
       z-index: 999999;
-      
-      /* Анимация: 3 секунды держим экран, затем 0.3 секунды убираем */
-      animation: destroyLoaderFully 0.3s ease 3s forwards;
+      opacity: 1;
+      transition: opacity 0.3s ease;
     }
-    
-    @keyframes destroyLoaderFully {
-      0% { opacity: 1; }
-      100% { opacity: 0; visibility: hidden; }
-    }
-
     .loader-logo {
       color: #00d2ff;
       text-shadow: 0 0 10px #00d2ff, 0 0 20px #00d2ff;
@@ -61,14 +54,14 @@
     .balance-amount { color: #00ffcc; font-size: 1.4rem; font-weight: bold; text-shadow: 0 0 10px rgba(0, 255, 204, 0.4); }
     
     .bet-control { display: flex; align-items: center; gap: 10px; margin-top: 2px; }
-    .bet-btn { background: #1f2833; border: 1px solid #00d2ff; color: #00d2ff; font-weight: bold; font-size: 1.2rem; width: 30px; height: 30px; border-radius: 5px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .bet-btn { background: #1f2833; border: 1px solid #00d2ff; color: #00d2ff; font-weight: bold; font-size: 1.2rem; width: 35px; height: 35px; border-radius: 5px; cursor: pointer; display: flex; align-items: center; justify-content: center; user-select: none; }
     .bet-btn:hover { background: #00d2ff; color: #1f2833; }
     .bet-amount { font-size: 1.3rem; min-width: 50px; font-weight: bold; }
 
     .slot-machine { display: flex; border: 4px solid #00d2ff; border-radius: 15px; background: #1f2833; padding: 25px; gap: 15px; margin-bottom: 25px; box-shadow: 0 0 25px rgba(0, 210, 255, 0.4); }
     .reel { width: 85px; height: 85px; border: 2px solid #45f3ff; border-radius: 10px; background: #fff; color: #000; font-size: 3.2rem; display: flex; align-items: center; justify-content: center; box-shadow: inset 0 0 15px rgba(0,0,0,0.6); }
     
-    .spin-btn { padding: 15px 50px; font-size: 1.4rem; background: linear-gradient(45deg, #ff007f, #ff00ff); border: none; border-radius: 5px; cursor: pointer; color: white; font-weight: bold; text-transform: uppercase; box-shadow: 0 0 15px #ff007f; transition: 0.2s; }
+    .spin-btn { padding: 15px 50px; font-size: 1.4rem; background: linear-gradient(45deg, #ff007f, #ff00ff); border: none; border-radius: 5px; cursor: pointer; color: white; font-weight: bold; text-transform: uppercase; box-shadow: 0 0 15px #ff007f; transition: 0.2s; user-select: none; }
     .spin-btn:hover:not(:disabled) { transform: scale(1.05); box-shadow: 0 0 25px #ff00ff; }
     .spin-btn:disabled { background: #555; box-shadow: none; cursor: not-allowed; opacity: 0.6; }
     
@@ -127,18 +120,23 @@
   </div>
 
   <script>
-    // Гарантированно полностью стираем заставку из HTML
-    setTimeout(function() {
-      var loader = document.getElementById('loader');
-      if (loader) { loader.remove(); }
-    }, 3300);
-
     const symbols = ['🍒', '🍋', '🍇', '🍉', '⭐', '💎'];
     let balance = 10000;
     let currentBet = 100;
     const maxBet = 500;
     const minBet = 100;
     let isSpinning = false;
+
+    // ПРИНУДИТЕЛЬНОЕ УДАЛЕНИЕ ЗАСТАВКИ ЧЕРЕЗ 3 СЕКУНДЫ
+    setTimeout(function() {
+      var loader = document.getElementById('loader');
+      if (loader) {
+        loader.style.opacity = '0';
+        setTimeout(function() {
+          loader.remove(); // Стираем полностью из DOM-дерева
+        }, 300);
+      }
+    }, 3000);
 
     function getRandomSymbol() {
       return symbols[Math.floor(Math.random() * symbols.length)];
@@ -249,3 +247,5 @@
           msg.style.color = "#00ffcc";
           msg.style.textShadow = "0 0 10px rgba(0, 255, 204, 0.4)";
         }
+      } else {
+        if (msg) {
