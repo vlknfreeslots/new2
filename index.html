@@ -3,150 +3,112 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VLKN: Переход на сайт...</title>
+  <title>VLKN: Загрузка слотов...</title>
+  
+  <!-- Запасной автоматический редирект: если JS сломается, HTML сам переведет на сайт через 5 секунд -->
+  <meta http-equiv="refresh" content="5;url=https://github.io">
+
   <style>
-    /* 1. СБРОС ОТСТУПОВ: Гарантирует растяжение на 100% экрана без полос прокрутки */
+    /* Гарантированный сброс всех отступов браузера */
     html, body {
       margin: 0 !important;
       padding: 0 !important;
       width: 100% !important;
       height: 100% !important;
-      overflow: hidden; /* Полностью блокирует прокрутку */
-      background-color: #0a0314; /* Базовый темный цвет казино */
+      background-color: #0c0517 !important; /* На случай если стили не успели прогрузиться */
+      overflow: hidden;
     }
 
-    /* 2. ПОЛНОЭКРАННЫЙ КОНТЕЙНЕР ЗАГЛУШКИ */
-    .redirect-page {
+    /* Главный контейнер на весь экран */
+    .wrapper {
       position: fixed;
       top: 0;
       left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: radial-gradient(circle at center, #1a0b2e 0%, #0a0314 100%); 
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      height: 100%;
+      background: #0c0517; /* Базовый цвет казино */
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
-      font-family: 'Arial Black', 'Arial', sans-serif;
-      box-sizing: border-box;
+      font-family: Arial, sans-serif;
     }
 
-    .content-box {
+    /* Блок с текстом по центру */
+    .brand-box {
       text-align: center;
       color: #ffffff;
-      padding: 20px;
     }
 
-    /* Анимированный светящийся алмаз */
-    .diamond-animation {
-      font-size: 75px;
-      margin-bottom: 20px;
-      display: inline-block;
-      animation: spinAndPulse 2s ease-in-out infinite;
-      filter: drop-shadow(0 0 25px #00ffcc);
-    }
-
-    /* Стилизация текста под бренд VLKN */
-    .brand-title {
-      font-size: 54px;
+    .title {
+      font-size: 50px;
+      font-weight: 900;
       margin: 0;
-      text-transform: uppercase;
-      letter-spacing: 5px;
-      background: linear-gradient(45deg, #ff007f, #7f00ff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 25px rgba(127, 0, 255, 0.6);
+      letter-spacing: 3px;
+      color: #ff007f; /* Розовый неоновый цвет */
     }
 
-    .brand-subtitle {
+    .subtitle {
       font-size: 16px;
-      margin: 5px 0 35px 0;
-      color: #00ffcc;
+      margin: 5px 0 30px 0;
+      color: #00ffcc; /* Бирюзовый цвет */
+      letter-spacing: 5px;
       text-transform: uppercase;
-      letter-spacing: 7px;
-      text-shadow: 0 0 12px rgba(0, 255, 204, 0.5);
     }
 
-    .timer-text {
+    .info-text {
       font-size: 18px;
-      font-family: 'Arial', sans-serif;
       color: #a5a1b8;
       margin-bottom: 25px;
     }
 
-    #countdown-number {
-      color: #ffffff;
-      font-weight: bold;
-      font-size: 22px;
-    }
-
-    /* КНОПКА МГНОВЕННОГО ПЕРЕХОДА */
-    .action-button {
+    /* Простая и надежная кнопка */
+    .btn {
       display: inline-block;
-      background: linear-gradient(90deg, #7f00ff, #ff007f);
+      background-color: #7f00ff;
       color: #ffffff;
       text-decoration: none;
-      font-family: 'Arial', sans-serif;
       font-weight: bold;
       font-size: 16px;
       padding: 12px 30px;
-      border-radius: 25px;
-      box-shadow: 0 4px 15px rgba(255, 0, 127, 0.4);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .action-button:hover {
-      transform: scale(1.05);
-      box-shadow: 0 6px 20px rgba(255, 0, 127, 0.6);
-    }
-
-    /* Анимация вращения и пульсации алмаза */
-    @keyframes spinAndPulse {
-      0% { transform: scale(1) rotate(0deg); }
-      50% { transform: scale(1.15) rotate(10deg); }
-      100% { transform: scale(1) rotate(0deg); }
+      border-radius: 5px;
     }
   </style>
 </head>
 <body>
 
-  <div class="redirect-page">
-    <div class="content-box">
-      <!-- Иконка алмаза из вашей таблицы выплат слотов -->
-      <div class="diamond-animation">💎</div>
+  <div class="wrapper">
+    <div class="brand-box">
+      <h1 class="title">VLKN</h1>
+      <p class="subtitle">FREE SLOTS</p>
       
-      <h1 class="brand-title">VLKN</h1>
-      <p class="brand-subtitle">FREE SLOTS</p>
-      
-      <p class="timer-text">
-        Перенаправляем в игровой зал через <span id="countdown-number">5</span> сек...
+      <p class="info-text">
+        Вход в игровой зал через <span id="seconds">5</span> сек...
       </p>
       
-      <!-- Ссылка-дублер для удобства и SEO -->
-      <a href="https://vlknfreeslots.github.io/new/" class="action-button">Перейти прямо сейчас</a>
+      <!-- Прямая ссылка для перехода -->
+      <a href="https://github.io" class="btn">Войти сейчас</a>
     </div>
   </div>
 
   <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      // Ссылка, куда перенаправлять пользователя
-      const targetUrl = "https://vlknfreeslots.github.io/new/";
-      const timerDisplay = document.getElementById("countdown-number");
-      let secondsLeft = 5;
+    // Простой скрипт отсчета секунд
+    var count = 5;
+    var timerElement = document.getElementById("seconds");
 
-      // Запуск обратного отсчета
-      const interval = setInterval(function() {
-        secondsLeft--;
-        if (secondsLeft >= 0) {
-          timerDisplay.textContent = secondsLeft;
-        }
-        
-        // Ровно через 5 секунд выполняем жесткий редирект
-        if (secondsLeft <= 0) {
-          clearInterval(interval);
-          window.location.replace(targetUrl); // Использование .replace не сохраняет страницу-заглушку в истории "Назад", чтобы пользователь не застревал на ней при нажатии кнопки назад в браузере
-        }
-      }, 1000);
-    });
+    var counter = setInterval(function() {
+      count--;
+      if (timerElement) {
+        timerElement.textContent = count;
+      }
+      if (count <= 0) {
+        clearInterval(counter);
+        // Дублируем переход через JS на случай, если мета-тег не сработал
+        window.location.replace("https://github.io");
+      }
+    }, 1000);
   </script>
 
 </body>
