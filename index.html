@@ -1,31 +1,18 @@
-<!-- 1. Шаблон нашего кастомного веб-компонента -->
-<template id="card-template">
-  <style>
-    .card { border: 2px solid #333; padding: 20px; border-radius: 8px; width: 250px; }
-    .title { font-weight: bold; font-size: 1.2em; margin-bottom: 10px; color: #007bff; }
-  </style>
-  <div class="card">
-    <!-- Именованный слот для заголовка -->
-    <div class="title"><slot name="title">Дефолтный заголовок</slot></div>
-    <!-- Неименованный (дефолтный) слот для основного контента -->
-    <div class="content"><slot>Здесь будет текст...</slot></div>
-  </div>
-</template>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Мой проект на GitHub</title>
+  <!-- Подключение внешних стилей (опционально) -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-<!-- 2. Использование компонента на странице -->
-<my-card>
-  <span slot="title">Моя карточка</span>
-  Это основной текст, который автоматически попадёт в дефолтный слот.
-</my-card>
+  <h1>Привет, GitHub!</h1>
+  <p>Это пример простейшей HTML-страницы.</p>
 
-<!-- 3. Скрипт для регистрации кастомного элемента -->
-<script>
-  customElements.define('my-card', class extends HTMLElement {
-    constructor() {
-      super();
-      const template = document.getElementById('card-template').content;
-      // Создаем Shadow DOM и прикрепляем шаблон
-      this.attachShadow({ mode: 'open' }).appendChild(template.cloneNode(true));
-    }
-  });
-</script>
+  <!-- Подключение скриптов (опционально) -->
+  <script src="script.js"></script>
+</body>
+</html>
