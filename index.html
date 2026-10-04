@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>VLKN: free slots</title>
   <style>
-    /* СТИЛИ ДЛЯ ЗАСТАВКИ ЗАГРУЗКИ */
+    /* НЕУБИВАЕМАЯ ЗАСТАВКА НА ЧИСТОМ CSS (БЕЗ JAVASCRIPT) */
     #loader {
       position: fixed;
       top: 0;
@@ -17,8 +17,29 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      z-index: 999999; /* Максимальный приоритет поверх всего */
+      z-index: 999999;
+      
+      /* Анимация: ждем 3 секунды, затем 0.5 секунды плавно исчезаем */
+      animation: fadeOutOnly 0.5s ease 3s forwards;
+      /* Отключаем перехват кликов мыши сразу после исчезновения заставки */
+      pointer-events: none; 
     }
+    
+    @keyframes fadeOutOnly {
+      0% {
+        opacity: 1;
+        visibility: visible;
+      }
+      99% {
+        opacity: 0;
+        visibility: visible;
+      }
+      100% {
+        opacity: 0;
+        visibility: hidden; /* Полностью прячем заставку от кликов */
+      }
+    }
+
     .loader-logo {
       color: #00d2ff;
       text-shadow: 0 0 10px #00d2ff, 0 0 20px #00d2ff;
@@ -87,7 +108,7 @@
   <div class="dashboard">
     <div class="panel-box">
       <div class="panel-label">Баланс</div>
-      <div id="balance" class="balance-amount">10000</div>
+      <div id="balance" class="balance-amount">10000 🪙</div>
     </div>
     <div class="panel-box">
       <div class="panel-label">Ставка</div>
@@ -118,16 +139,6 @@
   </div>
 
   <script>
-    // 1. АБСОЛЮТНЫЙ ПРИНУДИТЕЛЬНЫЙ ТАЙМЕР (В самом верху)
-    // Не зависит ни от каких других функций и гарантированно прячет заставку через 3 секунды
-    setTimeout(function() {
-      var loader = document.getElementById('loader');
-      if (loader) {
-        loader.style.display = 'none'; // Жестко скрываем из видимости
-      }
-    }, 3000); // 3000 мс = 3 секунды
-
-    // 2. ЛОГИКА ИГРЫ СЛОТОВ
     const symbols = ['🍒', '🍋', '🍇', '🍉', '⭐', '💎'];
     let balance = 10000;
     let currentBet = 100;
@@ -135,12 +146,9 @@
     const minBet = 100;
     let isSpinning = false;
     
-    // Безопасный вызов инициализации интерфейса
-    try {
-      updateDisplay();
-    } catch(e) {
-      console.log("Ошибка инициализации интерфейса: ", e);
-    }
+    // Прямая моментальная инициализация цифр без оберток
+    document.getElementById('balance').innerText = balance + " 🪙";
+    document.getElementById('betDisplay').innerText = currentBet;
 
     function getRandomSymbol() {
       return symbols[Math.floor(Math.random() * symbols.length)];
@@ -243,7 +251,3 @@
             msg.style.textShadow = "0 0 15px #ffaa00";
           }
         }
-      } else if (s1 === s2 || s2 === s3 || s1 === s3) {
-        winAmount = Math.floor(currentBet * 1.5);
-        balance += winAmount;
-        if (msg) {
