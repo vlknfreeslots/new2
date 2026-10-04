@@ -6,50 +6,6 @@
   <title>VLKN: free slots</title>
   <style>
     body { font-family: 'Arial Black', sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; background: #0b0c10; color: white; margin: 0; padding: 20px; box-sizing: border-box; }
-    
-    /* Стили экрана загрузки */
-    #loader {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: #0b0c10;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-      transition: opacity 0.5s ease, transform 0.5s ease;
-    }
-    .spinner {
-      width: 60px;
-      height: 60px;
-      border: 5px solid rgba(0, 210, 255, 0.1);
-      border-top: 5px solid #00d2ff;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      box-shadow: 0 0 15px rgba(0, 210, 255, 0.5);
-      margin-bottom: 20px;
-    }
-    .loader-text {
-      color: #ff007f;
-      font-size: 1.5rem;
-      letter-spacing: 5px;
-      text-transform: uppercase;
-      text-shadow: 0 0 10px #ff007f;
-      animation: pulse 1.5s ease-in-out infinite;
-    }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    @keyframes pulse {
-      0%, 100% { opacity: 0.6; }
-      50% { opacity: 1; }
-    }
-
-    /* Основной контент игры */
     .logo { color: #00d2ff; text-shadow: 0 0 10px #00d2ff, 0 0 20px #00d2ff; font-size: 2.5rem; margin-bottom: 5px; text-transform: uppercase; }
     .subtitle { color: #ff007f; font-size: 1.2rem; margin-bottom: 20px; letter-spacing: 2px; text-transform: uppercase; font-weight: bold; text-shadow: 0 0 8px #ff007f; }
     
@@ -84,12 +40,6 @@
 </head>
 <body>
 
-  <!-- Экран загрузки -->
-  <div id="loader">
-    <div class="spinner"></div>
-    <div class="loader-text">Loading...</div>
-  </div>
-
   <div class="logo">VLKN</div>
   <div class="subtitle">free slots</div>
 
@@ -97,7 +47,7 @@
   <div class="dashboard">
     <div class="panel-box">
       <div class="panel-label">Баланс</div>
-      <div id="balance" class="balance-amount">10000 🪙</div>
+      <div id="balance" class="balance-amount">10000</div>
     </div>
     <div class="panel-box">
       <div class="panel-label">Ставка</div>
@@ -136,18 +86,6 @@
     const minBet = 100;
     let isSpinning = false;
     
-    // Прямой запуск скрытия экрана загрузки без ожидания лишних событий
-    setTimeout(() => {
-      const loader = document.getElementById('loader');
-      if (loader) {
-        loader.style.opacity = '0';
-        loader.style.transform = 'scale(1.1)';
-        setTimeout(() => {
-          loader.style.display = 'none';
-        }, 500);
-      }
-    }, 2000); // Ровно 2 секунды
-
     function getRandomSymbol() {
       return symbols[Math.floor(Math.random() * symbols.length)];
     }
@@ -214,7 +152,8 @@
       let winAmount = 0;
 
       if (s1 === s2 && s2 === s3) {
-        let multiplier = 5; 
+        // Три совпадения
+        let multiplier = 5; // Дефолт для лимона и черешни
         if (s1 === '💎') multiplier = 50;
         else if (s1 === '⭐') multiplier = 20;
         else if (s1 === '🍉' || s1 === '🍇') multiplier = 10;
@@ -232,11 +171,24 @@
           msg.style.textShadow = "0 0 15px #ffaa00";
         }
       } else if (s1 === s2 || s2 === s3 || s1 === s3) {
+        // Два совпадения (Восстановленная логика)
         winAmount = Math.floor(currentBet * 1.5);
         balance += winAmount;
-        msg.innerText = `👍 Небольшой выигрыш! +${winAmount} 🪙`;
-        msg.style.color = "#a5d6ff";
-        msg.style.textShadow = "0 0 10px rgba(165,214,255,0.5)";
+        msg.innerText = `✨ Выигрыш! +${winAmount} 🪙`;
+        msg.style.color = "#ffdd00";
+        msg.style.textShadow = "0 0 10px #ffdd00";
       } else {
-        msg.innerText = "Повезет в следующий раз!";
-        msg.style.color = "#ff7b72";
+        // Проигрыш (Восстановленная логика)
+        msg.innerText = `Увы, попробуйте еще раз!`;
+        msg.style.color = "#ff3333";
+        msg.style.textShadow = "none";
+      }
+      
+      updateDisplay();
+    }
+
+    // Инициализация отображения при старте
+    updateDisplay();
+  </script>
+</body>
+</html>
