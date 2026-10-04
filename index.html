@@ -2,13 +2,42 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>VLKN: free slots</title>
   <style>
-    body { font-family: 'Arial Black', sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; background: #0b0c10; color: white; margin: 0; padding: 20px; box-sizing: border-box; overflow: hidden; }
+    /* Базовые сбросы для мобильных */
+    html, body { 
+      margin: 0; 
+      padding: 0; 
+      width: 100%; 
+      height: 100%; 
+      height: 100dvh; /* Динамическая высота под мобильные экраны */
+      background: #0b0c10; 
+      color: white; 
+      font-family: 'Arial Black', sans-serif; 
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      justify-content: center; 
+      box-sizing: border-box; 
+      overflow: hidden; 
+    }
     
-    /* Стили экрана загрузки (Заставка) */
-    #preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0b0c10; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; }
+    /* Исправленная заставка на весь экран смартфона */
+    #preloader { 
+      position: fixed; 
+      top: 0; 
+      left: 0; 
+      width: 100vw; 
+      height: 100vh; 
+      height: 100dvh; /* Гарантирует полный экран без вылетов под панели браузера */
+      background: #0b0c10; 
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      justify-content: center; 
+      z-index: 9999; 
+    }
     .loader-logo { color: #00d2ff; text-shadow: 0 0 10px #00d2ff, 0 0 20px #00d2ff; font-size: 3rem; text-transform: uppercase; margin-bottom: 20px; }
     .spinner { width: 50px; height: 50px; border: 5px solid rgba(255, 0, 127, 0.2); border-top: 5px solid #ff007f; border-radius: 50%; animation: spinLoader 1s linear infinite; box-shadow: 0 0 10px #ff007f; }
     .loader-text { margin-top: 15px; color: #ff007f; font-size: 1rem; letter-spacing: 3px; text-transform: uppercase; font-weight: bold; text-shadow: 0 0 5px #ff007f; animation: blinkText 1.5s infinite; }
@@ -23,33 +52,33 @@
     }
 
     /* Основной контент игры (Изначально скрыт) */
-    .game-content { display: none; flex-direction: column; align-items: center; width: 100%; }
+    .game-content { display: none; flex-direction: column; align-items: center; width: 100%; max-width: 500px; padding: 10px; box-sizing: border-box; }
 
-    .logo { color: #00d2ff; text-shadow: 0 0 10px #00d2ff, 0 0 20px #00d2ff; font-size: 2.5rem; margin-bottom: 5px; text-transform: uppercase; }
-    .subtitle { color: #ff007f; font-size: 1.2rem; margin-bottom: 20px; letter-spacing: 2px; text-transform: uppercase; font-weight: bold; text-shadow: 0 0 8px #ff007f; }
+    .logo { color: #00d2ff; text-shadow: 0 0 10px #00d2ff, 0 0 20px #00d2ff; font-size: 2.2rem; margin-bottom: 3px; text-transform: uppercase; }
+    .subtitle { color: #ff007f; font-size: 1.1rem; margin-bottom: 15px; letter-spacing: 2px; text-transform: uppercase; font-weight: bold; text-shadow: 0 0 8px #ff007f; }
     
-    .dashboard { display: flex; gap: 20px; margin-bottom: 20px; align-items: center; }
-    .panel-box { background: rgba(255, 255, 255, 0.05); padding: 10px 20px; border-radius: 15px; border: 1px solid rgba(255, 255, 255, 0.1); text-align: center; }
-    .panel-label { font-size: 0.8rem; color: #aaa; text-transform: uppercase; margin-bottom: 3px; font-family: Arial, sans-serif; }
-    .balance-amount { color: #00ffcc; font-size: 1.4rem; font-weight: bold; text-shadow: 0 0 10px rgba(0, 255, 204, 0.4); }
+    .dashboard { display: flex; gap: 15px; margin-bottom: 15px; align-items: center; }
+    .panel-box { background: rgba(255, 255, 255, 0.05); padding: 8px 15px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1); text-align: center; }
+    .panel-label { font-size: 0.75rem; color: #aaa; text-transform: uppercase; margin-bottom: 3px; font-family: Arial, sans-serif; }
+    .balance-amount { color: #00ffcc; font-size: 1.2rem; font-weight: bold; text-shadow: 0 0 10px rgba(0, 255, 204, 0.4); }
     
-    .bet-control { display: flex; align-items: center; gap: 10px; margin-top: 2px; }
-    .bet-btn { background: #1f2833; border: 1px solid #00d2ff; color: #00d2ff; font-weight: bold; font-size: 1.2rem; width: 30px; height: 30px; border-radius: 5px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .bet-control { display: flex; align-items: center; gap: 8px; margin-top: 2px; }
+    .bet-btn { background: #1f2833; border: 1px solid #00d2ff; color: #00d2ff; font-weight: bold; font-size: 1.1rem; width: 30px; height: 30px; border-radius: 5px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
     .bet-btn:hover { background: #00d2ff; color: #1f2833; }
-    .bet-amount { font-size: 1.3rem; min-width: 50px; text-align: center; }
+    .bet-amount { font-size: 1.2rem; min-width: 45px; text-align: center; }
 
-    .slot-machine { display: flex; border: 4px solid #00d2ff; border-radius: 15px; background: #1f2833; padding: 25px; gap: 15px; margin-bottom: 25px; box-shadow: 0 0 25px rgba(0, 210, 255, 0.4); }
-    .reel { width: 85px; height: 85px; border: 2px solid #45f3ff; border-radius: 10px; background: #fff; color: #000; font-size: 3.2rem; display: flex; align-items: center; justify-content: center; box-shadow: inset 0 0 15px rgba(0,0,0,0.6); }
+    .slot-machine { display: flex; border: 4px solid #00d2ff; border-radius: 15px; background: #1f2833; padding: 20px; gap: 12px; margin-bottom: 20px; box-shadow: 0 0 25px rgba(0, 210, 255, 0.4); }
+    .reel { width: 75px; height: 75px; border: 2px solid #45f3ff; border-radius: 10px; background: #fff; color: #000; font-size: 2.8rem; display: flex; align-items: center; justify-content: center; box-shadow: inset 0 0 15px rgba(0,0,0,0.6); }
     
-    .spin-btn { padding: 15px 50px; font-size: 1.4rem; background: linear-gradient(45deg, #ff007f, #ff00ff); border: none; border-radius: 5px; cursor: pointer; color: white; font-weight: bold; text-transform: uppercase; box-shadow: 0 0 15px #ff007f; transition: 0.2s; }
-    .spin-btn:hover:not(:disabled) { transform: scale(1.05); box-shadow: 0 0 25px #ff00ff; }
+    .spin-btn { padding: 12px 40px; font-size: 1.3rem; background: linear-gradient(45deg, #ff007f, #ff00ff); border: none; border-radius: 5px; cursor: pointer; color: white; font-weight: bold; text-transform: uppercase; box-shadow: 0 0 15px #ff007f; transition: 0.2s; }
+    .spin-btn:hover:not(:disabled) { transform: scale(1.03); box-shadow: 0 0 25px #ff00ff; }
     .spin-btn:disabled { background: #555; box-shadow: none; cursor: not-allowed; opacity: 0.6; }
     
-    #message { font-size: 1.5rem; height: 2rem; color: #00ffcc; font-weight: bold; text-align: center; margin-top: 20px; text-shadow: 0 0 10px rgba(0,255,204,0.5); }
+    #message { font-size: 1.3rem; height: 2rem; color: #00ffcc; font-weight: bold; text-align: center; margin-top: 15px; text-shadow: 0 0 10px rgba(0,255,204,0.5); }
 
-    .paytable { margin-top: 30px; background: rgba(0, 0, 0, 0.4); padding: 15px; border-radius: 10px; border: 1px solid #1f2833; font-family: Arial, sans-serif; font-size: 0.9rem; max-width: 400px; width: 100%; }
-    .paytable-title { color: #ff007f; text-align: center; font-weight: bold; margin-bottom: 10px; text-transform: uppercase; font-family: 'Arial Black', sans-serif; }
-    .paytable-row { display: flex; justify-content: space-between; margin-bottom: 5px; padding-bottom: 5px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .paytable { margin-top: 20px; background: rgba(0, 0, 0, 0.4); padding: 12px; border-radius: 10px; border: 1px solid #1f2833; font-family: Arial, sans-serif; font-size: 0.85rem; width: 100%; max-width: 360px; }
+    .paytable-title { color: #ff007f; text-align: center; font-weight: bold; margin-bottom: 8px; text-transform: uppercase; font-family: 'Arial Black', sans-serif; }
+    .paytable-row { display: flex; justify-content: space-between; margin-bottom: 4px; padding-bottom: 4px; border-bottom: 1px solid rgba(255,255,255,0.05); }
     .paytable-row:last-child { border-bottom: none; }
     .multiplier { color: #ffaa00; font-weight: bold; }
   </style>
@@ -191,15 +220,3 @@
           msg.style.textShadow = "0 0 20px #00ffcc, 0 0 30px #ff00ff";
         } else {
           msg.innerText = `🎉 КОМБО! +${winAmount} 🪙`;
-          msg.style.color = "#ffaa00";
-          msg.style.textShadow = "0 0 15px #ffaa00";
-        }
-      } else if (s1 === s2 || s2 === s3 || s1 === s3) {
-        winAmount = Math.floor(currentBet * 1.5);
-        balance += winAmount;
-        msg.innerText = `✨ Выигрыш! +${winAmount} 🪙`;
-        msg.style.color = "#ffdd00";
-        msg.style.textShadow = "0 0 10px #ffdd00";
-      } else {
-        msg.innerText = `Увы, попробуйте еще раз!`;
-        msg.style.color = "#ff3333";
