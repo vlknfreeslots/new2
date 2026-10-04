@@ -1,114 +1,153 @@
-<!-- 1. HTML-структура заставки VLKN -->
-<div id="site-preloader" class="preloader">
-  <div class="preloader-content">
-    <!-- Тематический анимированный элемент -->
-    <div class="diamond-loader">💎</div>
-    <h1 class="preloader-title">VLKN</h1>
-    <p class="preloader-subtitle">FREE SLOTS</p>
-    <p class="preloader-text">Загрузка слотов... <span id="preloader-timer">5</span> сек.</p>
-  </div>
-</div>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VLKN: Переход на сайт...</title>
+  <style>
+    /* 1. СБРОС ОТСТУПОВ: Гарантирует растяжение на 100% экрана без полос прокрутки */
+    html, body {
+      margin: 0 !important;
+      padding: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      overflow: hidden; /* Полностью блокирует прокрутку */
+      background-color: #0a0314; /* Базовый темный цвет казино */
+    }
 
-<!-- 2. CSS-стили заставки -->
-<style>
-  /* Фиксированный контейнер на весь экран с неоновым градиентом казино */
-  .preloader {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle, #1a0b2e 0%, #0a0314 100%); 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 99999;
-    opacity: 1;
-    transition: opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.6s;
-    visibility: visible;
-    font-family: 'Arial Black', 'Arial', sans-serif;
-  }
+    /* 2. ПОЛНОЭКРАННЫЙ КОНТЕЙНЕР ЗАГЛУШКИ */
+    .redirect-page {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: radial-gradient(circle at center, #1a0b2e 0%, #0a0314 100%); 
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Arial Black', 'Arial', sans-serif;
+      box-sizing: border-box;
+    }
 
-  .preloader-content {
-    text-align: center;
-    color: #ffffff;
-  }
+    .content-box {
+      text-align: center;
+      color: #ffffff;
+      padding: 20px;
+    }
 
-  /* Анимация пульсации и покачивания алмаза */
-  .diamond-loader {
-    font-size: 60px;
-    margin-bottom: 15px;
-    display: inline-block;
-    animation: pulseAndTilt 1.5s ease-in-out infinite;
-    filter: drop-shadow(0 0 15px #00ffcc); /* Свечение алмаза */
-  }
+    /* Анимированный светящийся алмаз */
+    .diamond-animation {
+      font-size: 75px;
+      margin-bottom: 20px;
+      display: inline-block;
+      animation: spinAndPulse 2s ease-in-out infinite;
+      filter: drop-shadow(0 0 25px #00ffcc);
+    }
 
-  /* Стилизация заголовков под бренд VLKN */
-  .preloader-title {
-    font-size: 42px;
-    margin: 0;
-    text-transform: uppercase;
-    letter-spacing: 4px;
-    background: linear-gradient(45deg, #ff007f, #7f00ff);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-shadow: 0 0 20px rgba(127, 0, 255, 0.5);
-  }
+    /* Стилизация текста под бренд VLKN */
+    .brand-title {
+      font-size: 54px;
+      margin: 0;
+      text-transform: uppercase;
+      letter-spacing: 5px;
+      background: linear-gradient(45deg, #ff007f, #7f00ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 25px rgba(127, 0, 255, 0.6);
+    }
 
-  .preloader-subtitle {
-    font-size: 14px;
-    margin: 5px 0 25px 0;
-    color: #00ffcc;
-    text-transform: uppercase;
-    letter-spacing: 6px;
-    text-shadow: 0 0 10px rgba(0, 255, 204, 0.4);
-  }
+    .brand-subtitle {
+      font-size: 16px;
+      margin: 5px 0 35px 0;
+      color: #00ffcc;
+      text-transform: uppercase;
+      letter-spacing: 7px;
+      text-shadow: 0 0 12px rgba(0, 255, 204, 0.5);
+    }
 
-  .preloader-text {
-    font-size: 16px;
-    font-family: 'Arial', sans-serif;
-    color: #a5a1b8;
-    margin: 0;
-  }
+    .timer-text {
+      font-size: 18px;
+      font-family: 'Arial', sans-serif;
+      color: #a5a1b8;
+      margin-bottom: 25px;
+    }
 
-  #preloader-timer {
-    color: #fff;
-    font-weight: bold;
-    font-size: 18px;
-  }
+    #countdown-number {
+      color: #ffffff;
+      font-weight: bold;
+      font-size: 22px;
+    }
 
-  /* Эффект плавного исчезновения */
-  .preloader--hidden {
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-  }
+    /* КНОПКА МГНОВЕННОГО ПЕРЕХОДА */
+    .action-button {
+      display: inline-block;
+      background: linear-gradient(90deg, #7f00ff, #ff007f);
+      color: #ffffff;
+      text-decoration: none;
+      font-family: 'Arial', sans-serif;
+      font-weight: bold;
+      font-size: 16px;
+      padding: 12px 30px;
+      border-radius: 25px;
+      box-shadow: 0 4px 15px rgba(255, 0, 127, 0.4);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
 
-  /* Описание анимации алмаза */
-  @keyframes pulseAndTilt {
-    0% { transform: scale(1) rotate(0deg); }
-    50% { transform: scale(1.2) rotate(15deg); }
-    100% { transform: scale(1) rotate(0deg); }
-  }
-</style>
+    .action-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(255, 0, 127, 0.6);
+    }
 
-<!-- 3. JavaScript-логика таймера -->
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    const preloader = document.getElementById("site-preloader");
-    const timerDisplay = document.getElementById("preloader-timer");
-    let timeLeft = 5; // Время принудительного ожидания в секундах
+    /* Анимация вращения и пульсации алмаза */
+    @keyframes spinAndPulse {
+      0% { transform: scale(1) rotate(0deg); }
+      50% { transform: scale(1.15) rotate(10deg); }
+      100% { transform: scale(1) rotate(0deg); }
+    }
+  </style>
+</head>
+<body>
 
-    const countdown = setInterval(function() {
-      timeLeft--;
-      if (timeLeft >= 0) {
-        timerDisplay.textContent = timeLeft;
-      }
+  <div class="redirect-page">
+    <div class="content-box">
+      <!-- Иконка алмаза из вашей таблицы выплат слотов -->
+      <div class="diamond-animation">💎</div>
       
-      if (timeLeft <= 0) {
-        clearInterval(countdown);
-        preloader.classList.add("preloader--hidden");
-      }
-    }, 1000);
-  });
-</script>
+      <h1 class="brand-title">VLKN</h1>
+      <p class="brand-subtitle">FREE SLOTS</p>
+      
+      <p class="timer-text">
+        Перенаправляем в игровой зал через <span id="countdown-number">5</span> сек...
+      </p>
+      
+      <!-- Ссылка-дублер для удобства и SEO -->
+      <a href="https://vlknfreeslots.github.io/new/" class="action-button">Перейти прямо сейчас</a>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // Ссылка, куда перенаправлять пользователя
+      const targetUrl = "https://vlknfreeslots.github.io/new/";
+      const timerDisplay = document.getElementById("countdown-number");
+      let secondsLeft = 5;
+
+      // Запуск обратного отсчета
+      const interval = setInterval(function() {
+        secondsLeft--;
+        if (secondsLeft >= 0) {
+          timerDisplay.textContent = secondsLeft;
+        }
+        
+        // Ровно через 5 секунд выполняем жесткий редирект
+        if (secondsLeft <= 0) {
+          clearInterval(interval);
+          window.location.replace(targetUrl); // Использование .replace не сохраняет страницу-заглушку в истории "Назад", чтобы пользователь не застревал на ней при нажатии кнопки назад в браузере
+        }
+      }, 1000);
+    });
+  </script>
+
+</body>
+</html>
