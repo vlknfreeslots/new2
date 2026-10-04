@@ -1,171 +1,114 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <!-- Блокируем масштабирование и подстраиваем под экран -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>VLKN: Удачной игры!</title>
-    <style>
-        /* Принудительно сбрасываем отступы у ВСЕХ элементов на странице */
-        html, body, div, h1 {
-            margin: 0 !important;
-            padding: 0 !important;
-            box-sizing: border-box !important;
-        }
+<!-- 1. HTML-структура заставки VLKN -->
+<div id="site-preloader" class="preloader">
+  <div class="preloader-content">
+    <!-- Тематический анимированный элемент -->
+    <div class="diamond-loader">💎</div>
+    <h1 class="preloader-title">VLKN</h1>
+    <p class="preloader-subtitle">FREE SLOTS</p>
+    <p class="preloader-text">Загрузка слотов... <span id="preloader-timer">5</span> сек.</p>
+  </div>
+</div>
 
-        body {
-            background-color: #0d0413; /* Фоновый цвет заглушки */
-            overflow: hidden !important;
-            -webkit-text-size-adjust: 100%;
-        }
+<!-- 2. CSS-стили заставки -->
+<style>
+  /* Фиксированный контейнер на весь экран с неоновым градиентом казино */
+  .preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, #1a0b2e 0%, #0a0314 100%); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 99999;
+    opacity: 1;
+    transition: opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.6s;
+    visibility: visible;
+    font-family: 'Arial Black', 'Arial', sans-serif;
+  }
 
-        /* Главный контейнер, который принудительно встает на ВСЕГДА весь экран */
-        .splash-screen-fixed {
-            position: fixed !important;
-            top: 0 !important;
-            left: 0 !important;
-            right: 0 !important;
-            bottom: 0 !important;
-            width: 100vw !important;
-            height: 100vh !important; /* Базовая высота */
-            height: 100dvh !important; /* Динамическая высота для мобильных */
-            
-            /* Центрирование контента внутри */
-            display: flex !important;
-            flex-direction: column !important;
-            justify-content: center !important;
-            align-items: center !important;
-            
-            /* Тематический градиент */
-            background: radial-gradient(circle, #250b31 0%, #0d0413 100%) !important;
-            z-index: 999999 !important; /* Поверх абсолютно всех элементов на странице */
-            overflow: hidden !important;
-            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
-            opacity: 1;
-        }
+  .preloader-content {
+    text-align: center;
+    color: #ffffff;
+  }
 
-        /* Эффект падающих символов на фоне */
-        .background-particles {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            pointer-events: none;
-            opacity: 0.15;
-            font-size: 24px;
-        }
+  /* Анимация пульсации и покачивания алмаза */
+  .diamond-loader {
+    font-size: 60px;
+    margin-bottom: 15px;
+    display: inline-block;
+    animation: pulseAndTilt 1.5s ease-in-out infinite;
+    filter: drop-shadow(0 0 15px #00ffcc); /* Свечение алмаза */
+  }
 
-        .particle {
-            position: absolute;
-            animation: fall 2s linear infinite;
-        }
+  /* Стилизация заголовков под бренд VLKN */
+  .preloader-title {
+    font-size: 42px;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    background: linear-gradient(45deg, #ff007f, #7f00ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 20px rgba(127, 0, 255, 0.5);
+  }
 
-        @keyframes fall {
-            0% { transform: translateY(-50px) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(105vh) rotate(360deg); opacity: 0; }
-        }
+  .preloader-subtitle {
+    font-size: 14px;
+    margin: 5px 0 25px 0;
+    color: #00ffcc;
+    text-transform: uppercase;
+    letter-spacing: 6px;
+    text-shadow: 0 0 10px rgba(0, 255, 204, 0.4);
+  }
 
-        /* Текстовый контейнер */
-        .splash-content {
-            text-align: center;
-            width: 100%;
-            padding: 20px !important;
-        }
+  .preloader-text {
+    font-size: 16px;
+    font-family: 'Arial', sans-serif;
+    color: #a5a1b8;
+    margin: 0;
+  }
 
-        /* Яркий игровой логотип */
-        .logo {
-            font-size: 42px;
-            font-weight: 900;
-            font-family: 'Arial Black', Gadget, sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            color: #fff;
-            text-shadow: 
-                0 0 10px #ff007f,
-                0 0 20px #ff007f,
-                0 0 40px #ff007f,
-                0 0 80px #ff007f;
-            animation: pulse 1.5s ease-in-out infinite alternate;
-            margin-bottom: 5px !important;
-        }
+  #preloader-timer {
+    color: #fff;
+    font-weight: bold;
+    font-size: 18px;
+  }
 
-        .sub-logo {
-            font-size: 18px;
-            font-family: 'Arial Black', Gadget, sans-serif;
-            color: #ffd700;
-            text-transform: uppercase;
-            letter-spacing: 6px;
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
-            margin-bottom: 40px !important;
-        }
+  /* Эффект плавного исчезновения */
+  .preloader--hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
 
-        /* Круговой неоновый лоадер */
-        .casino-loader {
-            width: 65px;
-            height: 65px;
-            border: 4px dashed #ffd700;
-            border-radius: 50%;
-            border-left-color: #ff007f;
-            animation: spin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-            margin: 0 auto !important;
-            box-shadow: 0 0 20px rgba(255, 0, 127, 0.4), inset 0 0 20px rgba(255, 215, 0, 0.2);
-        }
+  /* Описание анимации алмаза */
+  @keyframes pulseAndTilt {
+    0% { transform: scale(1) rotate(0deg); }
+    50% { transform: scale(1.2) rotate(15deg); }
+    100% { transform: scale(1) rotate(0deg); }
+  }
+</style>
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+<!-- 3. JavaScript-логика таймера -->
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const preloader = document.getElementById("site-preloader");
+    const timerDisplay = document.getElementById("preloader-timer");
+    let timeLeft = 5; // Время принудительного ожидания в секундах
 
-        @keyframes pulse {
-            0% { transform: scale(0.98); text-shadow: 0 0 10px #ff007f, 0 0 20px #ff007f, 0 0 30px #ff007f; }
-            100% { transform: scale(1.02); text-shadow: 0 0 15px #ff007f, 0 0 30px #ff007f, 0 0 50px #ff007f, 0 0 70px #ff007f; }
-        }
-    </style>
-</head>
-<body>
-
-    <!-- Единый изолированный контейнер заставки -->
-    <div class="splash-screen-fixed" id="splash">
-        <div class="background-particles" id="particles"></div>
-        <div class="splash-content">
-            <div class="logo">VLKN</div>
-            <div class="sub-logo">Free Slots</div>
-            <div class="casino-loader"></div>
-        </div>
-    </div>
-
-    <script>
-        // Генератор фоновых символов слотов
-        const particlesContainer = document.getElementById('particles');
-        const symbols = ['💎', '⭐', '7️⃣', '🍋', '🍒', '💰'];
-        
-        for (let i = 0; i < 20; i++) {
-            const particle = document.createElement('div');
-            particle.className = 'particle';
-            particle.innerText = symbols[Math.floor(Math.random() * symbols.length)];
-            particle.style.left = Math.random() * 100 + 'vw';
-            particle.style.top = Math.random() * -20 + 'vh';
-            particle.style.animationDelay = Math.random() * 2 + 's';
-            particle.style.fontSize = Math.random() * (26 - 16) + 16 + 'px';
-            particlesContainer.appendChild(particle);
-        }
-
-        // Ссылка для автоматического перехода
-        const targetUrl = "https://github.io"; 
-        const displayTime = 2000; 
-
-        setTimeout(() => {
-            const splash = document.getElementById('splash');
-            splash.style.opacity = '0';
-            splash.style.transform = 'scale(0.95)';
-            
-            setTimeout(() => {
-                window.location.href = targetUrl;
-            }, 400); 
-
-        }, displayTime - 400);
-    </script>
-
-</body>
-</html>
+    const countdown = setInterval(function() {
+      timeLeft--;
+      if (timeLeft >= 0) {
+        timerDisplay.textContent = timeLeft;
+      }
+      
+      if (timeLeft <= 0) {
+        clearInterval(countdown);
+        preloader.classList.add("preloader--hidden");
+      }
+    }, 1000);
+  });
+</script>
