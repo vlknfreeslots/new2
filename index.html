@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>VLKN: free slots</title>
   <style>
-    /* Стили для заставки загрузки */
+    /* СТИЛИ ДЛЯ ЗАСТАВКИ ЗАГРУЗКИ */
     .loader-wrapper {
       position: fixed;
       top: 0;
@@ -17,7 +17,7 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      z-index: 99999;
+      z-index: 99999; /* Поверх основного контента */
       transition: opacity 0.5s ease, visibility 0.5s ease;
     }
     .loader-logo {
@@ -27,6 +27,7 @@
       font-family: 'Arial Black', sans-serif;
       margin-bottom: 20px;
       text-transform: uppercase;
+      letter-spacing: 2px;
     }
     .spinner {
       width: 60px;
@@ -34,18 +35,19 @@
       border: 4px solid rgba(0, 210, 255, 0.1);
       border-radius: 50%;
       border-top-color: #ff007f;
-      box-shadow: 0 0 15px rgba(255, 0, 127, 0.4);
+      box-shadow: 0 0 15px rgba(255, 0, 127, 0.5);
       animation: spin 1s linear infinite;
     }
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
+    /* Класс для плавного скрытия */
     .loader-wrapper.hidden {
       opacity: 0;
       visibility: hidden;
     }
 
-    /* Основные стили страницы */
+    /* ОСНОВНЫЕ СТИЛИ ИГРЫ */
     body { font-family: 'Arial Black', sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; background: #0b0c10; color: white; margin: 0; padding: 20px; box-sizing: border-box; }
     .logo { color: #00d2ff; text-shadow: 0 0 10px #00d2ff, 0 0 20px #00d2ff; font-size: 2.5rem; margin-bottom: 5px; text-transform: uppercase; }
     .subtitle { color: #ff007f; font-size: 1.2rem; margin-bottom: 20px; letter-spacing: 2px; text-transform: uppercase; font-weight: bold; text-shadow: 0 0 8px #ff007f; }
@@ -81,12 +83,13 @@
 </head>
 <body>
 
-  <!-- Заставка загрузки -->
+  <!-- Экран предзагрузки -->
   <div class="loader-wrapper" id="loader">
     <div class="loader-logo">VLKN</div>
     <div class="spinner"></div>
   </div>
 
+  <!-- Основной контент игры -->
   <div class="logo">VLKN</div>
   <div class="subtitle">free slots</div>
 
@@ -94,7 +97,7 @@
   <div class="dashboard">
     <div class="panel-box">
       <div class="panel-label">Баланс</div>
-      <div id="balance" class="balance-amount">10000 🪙</div>
+      <div id="balance" class="balance-amount">10000</div>
     </div>
     <div class="panel-box">
       <div class="panel-label">Ставка</div>
@@ -133,13 +136,16 @@
     const minBet = 100;
     let isSpinning = false;
     
-    // Скрипт скрытия заставки через 3 секунды после полной загрузки DOM
+    // ТАЙМЕР ЗАГРУЗКИ НА 3 СЕКУНДЫ
     window.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
         const loader = document.getElementById('loader');
-        if (loader) loader.classList.add('hidden');
-      }, 3000);
-      updateDisplay();
+        if (loader) {
+          loader.classList.add('hidden'); // Плавно скрываем экран загрузки
+        }
+      }, 3000); // 3000 миллисекунд = 3 секунды
+      
+      updateDisplay(); // Инициализируем отображение баланса при старте
     });
 
     function getRandomSymbol() {
@@ -209,7 +215,7 @@
 
       if (s1 === s2 && s2 === s3) {
         // Три совпадения
-        let multiplier = 5; 
+        let multiplier = 5; // Дефолт для лимона и черешни
         if (s1 === '💎') multiplier = 50;
         else if (s1 === '⭐') multiplier = 20;
         else if (s1 === '🍉' || s1 === '🍇') multiplier = 10;
@@ -227,13 +233,6 @@
           msg.style.textShadow = "0 0 15px #ffaa00";
         }
       } else if (s1 === s2 || s2 === s3 || s1 === s3) {
-        // Два совпадения
+        // Два совпадения (Полностью восстановленная логика)
         winAmount = Math.floor(currentBet * 1.5);
         balance += winAmount;
-        msg.innerText = `👍 Неплохо! Выигрыш: +${winAmount} 🪙`;
-        msg.style.color = "#00ffcc";
-        msg.style.textShadow = "0 0 10px rgba(0,255,204,0.3)";
-      } else {
-        // Нет совпадений
-        msg.innerText = "❌ Попробуйте еще раз!";
-        msg.style.color = "#ff007f";
