@@ -15,11 +15,10 @@
     .balance-amount { color: #00ffcc; font-size: 1.4rem; font-weight: bold; text-shadow: 0 0 10px rgba(0, 255, 204, 0.4); }
     
     .bet-control { display: flex; align-items: center; gap: 10px; margin-top: 2px; }
-    .bet-btn { background: #1f2833; border: 1px solid #00d2ff; color: #00d2ff; font-weight: bold; font-size: 1.2rem; width: 30px; height: 30px; border-radius: 5px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .bet-btn { background: #1f2833; border: 1px solid #00d2ff; color: #00d2ff; font-weight: bold; font-size: 1.2rem; width: 35px; height: 35px; border-radius: 5px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
     .bet-btn:hover { background: #00d2ff; color: #1f2833; }
-    .bet-amount { font-size: 1.3rem; min-width: 60px; font-weight: bold; text-align: center; }
+    .bet-amount { font-size: 1.3rem; min-width: 70px; font-weight: bold; text-align: center; }
 
-    /* Сетка 3x3 для слот-машины */
     .slot-machine { display: grid; grid-template-columns: repeat(3, 85px); grid-template-rows: repeat(3, 85px); border: 4px solid #00d2ff; border-radius: 15px; background: #1f2833; padding: 25px; gap: 15px; margin-bottom: 25px; box-shadow: 0 0 25px rgba(0, 210, 255, 0.4); }
     .reel { border: 2px solid #45f3ff; border-radius: 10px; background: #fff; color: #000; font-size: 3.2rem; display: flex; align-items: center; justify-content: center; box-shadow: inset 0 0 15px rgba(0,0,0,0.6); user-select: none; }
     
@@ -44,27 +43,26 @@
   <div class="dashboard">
     <div class="panel-box">
       <div class="panel-label">Баланс</div>
-      <div id="balance" class="balance-amount">10000</div>
+      <div id="balance" class="balance-amount">10000 🪙</div>
     </div>
     <div class="panel-box">
       <div class="panel-label">Линия / Всего (5 линий)</div>
       <div class="bet-control">
-        <button class="bet-btn" onclick="adjustBet(-10)">-</button>
+        <button class="bet-btn" onclick="minusBet()">-</button>
         <span id="betDisplay" class="bet-amount">20 / 100</span>
-        <button class="bet-btn" onclick="adjustBet(10)">+</button>
+        <button class="bet-btn" onclick="plusBet()">+</button>
       </div>
     </div>
   </div>
 
-  <!-- Поле 3х3 -->
   <div class="slot-machine">
     <div class="reel" id="r0c0">👑</div><div class="reel" id="r0c1">💎</div><div class="reel" id="r0c2">👑</div>
     <div class="reel" id="r1c0">💎</div><div class="reel" id="r1c1">👑</div><div class="reel" id="r1c2">💎</div>
     <div class="reel" id="r2c0">👑</div><div class="reel" id="r2c1">💎</div><div class="reel" id="r2c2">👑</div>
   </div>
 
-  <button id="spinBtn" class="spin-btn" onclick="spin()">Испытать удачу</button>
-  <div id="message">Удачи! На поле спрятан WILD-символ 👑 Корона!</div>
+  <button id="spinBtn" class="spin-btn" onclick="startSpin()">Испытать удачу</button>
+  <div id="message">Удачи! Активно 5 линий выплат. Корона 👑 заменяет любые символы!</div>
 
   <div class="paytable">
     <div class="paytable-title">Выплаты (за 1 линию)</div>
@@ -77,17 +75,10 @@
   </div>
 
   <script>
-    // Добавлен WILD символ 👑 в массив барабанов
     const symbols = ['🍒', '🍋', '🍇', '🍉', '⭐', '💎', '👑'];
     let balance = 10000;
     let betPerLine = 20; 
-    const maxBetPerLine = 200;
-    const minBetPerLine = 10;
     let isSpinning = false;
-    
-    function getRandomSymbol() {
-      return symbols[Math.floor(Math.random() * symbols.length)];
-    }
 
     function updateDisplay() {
       const totalBet = betPerLine * 5;
@@ -95,16 +86,23 @@
       document.getElementById('betDisplay').innerText = `${betPerLine} / ${totalBet}`;
     }
 
-    function adjustBet(amount) {
+    function minusBet() {
       if (isSpinning) return;
-      let newBet = betPerLine + amount;
-      if (newBet >= minBetPerLine && newBet <= maxBetPerLine) {
-        betPerLine = newBet;
+      if (betPerLine > 10) {
+        betPerLine -= 10;
         updateDisplay();
       }
     }
 
-    function spin() {
+    function plusBet() {
+      if (isSpinning) return;
+      if (betPerLine < 200) {
+        betPerLine += 10;
+        updateDisplay();
+      }
+    }
+
+    function startSpin() {
       if (isSpinning) return;
       const totalBet = betPerLine * 5;
       
@@ -113,7 +111,6 @@
           balance = 10000;
           updateDisplay();
           document.getElementById('message').innerText = "Баланс пополнен!";
-          document.getElementById('message').style.color = "#00ffcc";
         }
         return;
       }
@@ -137,7 +134,7 @@
       const interval = setInterval(() => {
         for (let row = 0; row < 3; row++) {
           for (let col = 0; col < 3; col++) {
-            matrix[row][col] = getRandomSymbol();
+            matrix[row][col] = symbols[Math.floor(Math.random() * symbols.length)];
             document.getElementById(`r${row}c${col}`).innerText = matrix[row][col];
           }
         }
@@ -150,25 +147,18 @@
       }, 90);
     }
 
-    // Умная функция оценки линии с учётом Wild
     function evaluateLine(s1, s2, s3) {
-      // 1. Проверка на чистый джекпот из 3 алмазов или 3 вайлдов
       if ((s1==='💎' || s1==='👑') && (s2==='💎' || s2==='👑') && (s3==='💎' || s3==='👑')) {
         return { type: 'combo', mult: 50, sym: '💎' };
       }
       
-      // Находим все уникальные обычные символы (исключая Wild)
       const regularSymbols = [s1, s2, s3].filter(s => s !== '👑');
       
-      // Если все три символа были Wild (Короны) — даем топ-выплату
       if (regularSymbols.length === 0) {
         return { type: 'combo', mult: 50, sym: '👑' };
       }
 
-      // Берём первый попавшийся обычный символ за целевой
       const target = regularSymbols[0];
-
-      // Проверяем, подходят ли все три ячейки под целевой символ (с учётом замен Wild)
       const match1 = (s1 === target || s1 === '👑');
       const match2 = (s2 === target || s2 === '👑');
       const match3 = (s3 === target || s3 === '👑');
@@ -180,10 +170,9 @@
         return { type: 'combo', mult: multiplier, sym: target };
       }
 
-      // Проверка на пары (любые 2 совпадения из 3, где Wild всегда помогает)
-      if ((s1===s2 || s1==='👑' || s2==='👑') && s1!=='' && s2!=='') return { type: 'pair', mult: 1.5 };
-      if ((s2===s3 || s2==='👑' || s3==='👑') && s2!=='' && s3!=='') return { type: 'pair', mult: 1.5 };
-      if ((s1===s3 || s1==='👑' || s3==='👑') && s1!=='' && s3!=='') return { type: 'pair', mult: 1.5 };
+      if ((s1===s2 || s1==='👑' || s2==='👑')) return { type: 'pair', mult: 1.5 };
+      if ((s2===s3 || s2==='👑' || s3==='👑')) return { type: 'pair', mult: 1.5 };
+      if ((s1===s3 || s1==='👑' || s3==='👑')) return { type: 'pair', mult: 1.5 };
 
       return { type: 'none', mult: 0 };
     }
@@ -196,8 +185,26 @@
       let totalWin = 0;
       let winningLinesText = [];
 
+      // Исправленные четкие координаты ячеек для 5 линий
       const lines = [
-        { name: "Горизонталь 1", cells: [[0,0], [0,1], [0,2]] },
-        { name: "Горизонталь 2", cells: [[1,0], [1,1], [1,2]] },
-        { name: "Горизонталь 3", cells: [[2,0], [2,1], [2,2]] },
-        { name: "Диагональ ➘",  cells: [[0,0], [1,1], [2,2]] },
+        { name: "Линия 1 (Верх)",  r1: 0, c1: 0, r2: 0, c2: 1, r3: 0, c3: 2 },
+        { name: "Линия 2 (Центр)", r1: 1, c1: 0, r2: 1, c2: 1, r3: 1, c3: 2 },
+        { name: "Линия 3 (Низ)",   r1: 2, c1: 0, r2: 2, c2: 1, r3: 2, c3: 2 },
+        { name: "Линия 4 (Диаг ➘)", r1: 0, c1: 0, r2: 1, c2: 1, r3: 2, c3: 2 },
+        { name: "Линия 5 (Диаг ➚)", r1: 2, c1: 0, r2: 1, c2: 1, r3: 0, c3: 2 }
+      ];
+
+      lines.forEach((line) => {
+        const s1 = matrix[line.r1][line.c1];
+        const s2 = matrix[line.r2][line.c2];
+        const s3 = matrix[line.r3][line.c3];
+        
+        const result = evaluateLine(s1, s2, s3);
+        let lineWin = 0;
+
+        if (result.type === 'combo') {
+          lineWin = betPerLine * result.mult;
+          totalWin += lineWin;
+          winningLinesText.push(`${line.name}: Три ${result.sym} (+${lineWin} 🪙)`);
+        } else if (result.type === 'pair') {
+          lineWin = Math.floor(betPerLine * result.mult);
