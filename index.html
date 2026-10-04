@@ -22,7 +22,7 @@
       50% { opacity: 1; }
     }
 
-    /* Основной контент игры (изначально скрыт через display: none) */
+    /* Основной контент игры (Изначально скрыт) */
     .game-content { display: none; flex-direction: column; align-items: center; width: 100%; }
 
     .logo { color: #00d2ff; text-shadow: 0 0 10px #00d2ff, 0 0 20px #00d2ff; font-size: 2.5rem; margin-bottom: 5px; text-transform: uppercase; }
@@ -154,17 +154,19 @@
       
       let count = 0;
       const interval = setInterval(() => {
-        const s1 = getRandomSymbol();
-        const s2 = getRandomSymbol();
-        const s3 = getRandomSymbol();
-        
-        document.getElementById('reel1').innerText = s1;
-        document.getElementById('reel2').innerText = s2;
-        document.getElementById('reel3').innerText = s3;
+        document.getElementById('reel1').innerText = getRandomSymbol();
+        document.getElementById('reel2').innerText = getRandomSymbol();
+        document.getElementById('reel3').innerText = getRandomSymbol();
         
         count++;
         if (count > 12) { 
           clearInterval(interval);
+          isSpinning = false;
+          document.getElementById('spinBtn').disabled = false;
+          
+          const s1 = document.getElementById('reel1').innerText;
+          const s2 = document.getElementById('reel2').innerText;
+          const s3 = document.getElementById('reel3').innerText;
           checkWin(s1, s2, s3);
         }
       }, 90);
@@ -172,9 +174,6 @@
 
     function checkWin(s1, s2, s3) {
       const msg = document.getElementById('message');
-      isSpinning = false;
-      document.getElementById('spinBtn').disabled = false;
-
       let winAmount = 0;
 
       if (s1 === s2 && s2 === s3) {
@@ -204,10 +203,3 @@
       } else {
         msg.innerText = `Увы, попробуйте еще раз!`;
         msg.style.color = "#ff3333";
-        msg.style.textShadow = "none";
-      }
-      
-      updateDisplay();
-    }
-
-    // Инициализация и железное скрытие заставки
