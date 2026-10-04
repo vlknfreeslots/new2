@@ -17,9 +17,7 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      z-index: 99999;
-      opacity: 1;
-      transition: opacity 0.4s ease;
+      z-index: 999999; /* Максимальный приоритет поверх всего */
     }
     .loader-logo {
       color: #00d2ff;
@@ -120,18 +118,16 @@
   </div>
 
   <script>
-    // АВТОНОМНЫЙ НЕЗАВИСИМЫЙ ТАЙМЕР ЗАСТАВКИ
-    // Срабатывает мгновенно и гарантированно удаляет заставку через 3 секунды
+    // 1. АБСОЛЮТНЫЙ ПРИНУДИТЕЛЬНЫЙ ТАЙМЕР (В самом верху)
+    // Не зависит ни от каких других функций и гарантированно прячет заставку через 3 секунды
     setTimeout(function() {
-      var loaderElement = document.getElementById('loader');
-      if (loaderElement) {
-        loaderElement.style.opacity = '0'; // Запускаем плавное растворение
-        setTimeout(function() {
-          loaderElement.remove(); // Полностью физически удаляем заставку из HTML
-        }, 400);
+      var loader = document.getElementById('loader');
+      if (loader) {
+        loader.style.display = 'none'; // Жестко скрываем из видимости
       }
     }, 3000); // 3000 мс = 3 секунды
 
+    // 2. ЛОГИКА ИГРЫ СЛОТОВ
     const symbols = ['🍒', '🍋', '🍇', '🍉', '⭐', '💎'];
     let balance = 10000;
     let currentBet = 100;
@@ -139,16 +135,20 @@
     const minBet = 100;
     let isSpinning = false;
     
-    // Сразу же принудительно прописываем баланс на экране
-    updateDisplay();
+    // Безопасный вызов инициализации интерфейса
+    try {
+      updateDisplay();
+    } catch(e) {
+      console.log("Ошибка инициализации интерфейса: ", e);
+    }
 
     function getRandomSymbol() {
       return symbols[Math.floor(Math.random() * symbols.length)];
     }
 
     function updateDisplay() {
-      const balanceEl = document.getElementById('balance');
-      const betEl = document.getElementById('betDisplay');
+      var balanceEl = document.getElementById('balance');
+      var betEl = document.getElementById('betDisplay');
       if (balanceEl) balanceEl.innerText = balance + " 🪙";
       if (betEl) betEl.innerText = currentBet;
     }
@@ -169,8 +169,11 @@
         if (confirm("У вас недостаточно монет для этой ставки! Получить 10 000 бесплатно?")) {
           balance = 10000;
           updateDisplay();
-          document.getElementById('message').innerText = "Баланс пополнен!";
-          document.getElementById('message').style.color = "#00ffcc";
+          var msg = document.getElementById('message');
+          if (msg) {
+            msg.innerText = "Баланс пополнен!";
+            msg.style.color = "#00ffcc";
+          }
         }
         return;
       }
@@ -179,10 +182,15 @@
       updateDisplay();
       
       isSpinning = true;
-      document.getElementById('spinBtn').disabled = true;
-      document.getElementById('message').innerText = "Вращение...";
-      document.getElementById('message').style.color = "#c9d1d9";
-      document.getElementById('message').style.textShadow = "none";
+      var spinBtn = document.getElementById('spinBtn');
+      var msg = document.getElementById('message');
+      
+      if (spinBtn) spinBtn.disabled = true;
+      if (msg) {
+        msg.innerText = "Вращение...";
+        msg.style.color = "#c9d1d9";
+        msg.style.textShadow = "none";
+      }
       
       let count = 0;
       const interval = setInterval(() => {
@@ -190,9 +198,13 @@
         const s2 = getRandomSymbol();
         const s3 = getRandomSymbol();
         
-        document.getElementById('reel1').innerText = s1;
-        document.getElementById('reel2').innerText = s2;
-        document.getElementById('reel3').innerText = s3;
+        var r1 = document.getElementById('reel1');
+        var r2 = document.getElementById('reel2');
+        var r3 = document.getElementById('reel3');
+        
+        if (r1) r1.innerText = s1;
+        if (r2) r2.innerText = s2;
+        if (r3) r3.innerText = s3;
         
         count++;
         if (count > 12) { 
@@ -203,9 +215,11 @@
     }
 
     function checkWin(s1, s2, s3) {
-      const msg = document.getElementById('message');
+      var msg = document.getElementById('message');
+      var spinBtn = document.getElementById('spinBtn');
+      
       isSpinning = false;
-      document.getElementById('spinBtn').disabled = false;
+      if (spinBtn) spinBtn.disabled = false;
 
       let winAmount = 0;
 
@@ -218,20 +232,18 @@
         winAmount = currentBet * multiplier;
         balance += winAmount;
 
-        if (s1 === '💎') {
-          msg.innerText = `🎰 МЕГА ДЖЕКПОТ! +${winAmount} 🪙`;
-          msg.style.color = "#00ffcc";
-          msg.style.textShadow = "0 0 20px #00ffcc, 0 0 30px #ff00ff";
-        } else {
-          msg.innerText = `🎉 КОМБО! +${winAmount} 🪙`;
-          msg.style.color = "#ffaa00";
-          msg.style.textShadow = "0 0 15px #ffaa00";
+        if (msg) {
+          if (s1 === '💎') {
+            msg.innerText = `🎰 МЕГА ДЖЕКПОТ! +${winAmount} 🪙`;
+            msg.style.color = "#00ffcc";
+            msg.style.textShadow = "0 0 20px #00ffcc, 0 0 30px #ff00ff";
+          } else {
+            msg.innerText = `🎉 КОМБО! +${winAmount} 🪙`;
+            msg.style.color = "#ffaa00";
+            msg.style.textShadow = "0 0 15px #ffaa00";
+          }
         }
       } else if (s1 === s2 || s2 === s3 || s1 === s3) {
         winAmount = Math.floor(currentBet * 1.5);
         balance += winAmount;
-        msg.innerText = `👍 Неплохо! Выигрыш: +${winAmount} 🪙`;
-        msg.style.color = "#00ffcc";
-        msg.style.textShadow = "0 0 10px rgba(0, 255, 204, 0.4)";
-      } else {
-        msg.innerText = "❌ Удачи в следующем раунде!";
+        if (msg) {
