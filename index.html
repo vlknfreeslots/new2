@@ -8,7 +8,7 @@
     body { font-family: 'Arial Black', sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; background: #0b0c10; color: white; margin: 0; padding: 20px; box-sizing: border-box; overflow: hidden; }
     
     /* Стили экрана загрузки (Заставка) */
-    #preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0b0c10; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; transition: opacity 0.5s ease, visibility 0.5s; }
+    #preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0b0c10; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; }
     .loader-logo { color: #00d2ff; text-shadow: 0 0 10px #00d2ff, 0 0 20px #00d2ff; font-size: 3rem; text-transform: uppercase; margin-bottom: 20px; }
     .spinner { width: 50px; height: 50px; border: 5px solid rgba(255, 0, 127, 0.2); border-top: 5px solid #ff007f; border-radius: 50%; animation: spinLoader 1s linear infinite; box-shadow: 0 0 10px #ff007f; }
     .loader-text { margin-top: 15px; color: #ff007f; font-size: 1rem; letter-spacing: 3px; text-transform: uppercase; font-weight: bold; text-shadow: 0 0 5px #ff007f; animation: blinkText 1.5s infinite; }
@@ -22,8 +22,8 @@
       50% { opacity: 1; }
     }
 
-    /* Основной контент игры */
-    .game-content { display: flex; flex-direction: column; align-items: center; opacity: 0; transition: opacity 0.5s ease; width: 100%; }
+    /* Основной контент игры (изначально скрыт через display: none) */
+    .game-content { display: none; flex-direction: column; align-items: center; width: 100%; }
 
     .logo { color: #00d2ff; text-shadow: 0 0 10px #00d2ff, 0 0 20px #00d2ff; font-size: 2.5rem; margin-bottom: 5px; text-transform: uppercase; }
     .subtitle { color: #ff007f; font-size: 1.2rem; margin-bottom: 20px; letter-spacing: 2px; text-transform: uppercase; font-weight: bold; text-shadow: 0 0 8px #ff007f; }
@@ -71,7 +71,7 @@
     <div class="dashboard">
       <div class="panel-box">
         <div class="panel-label">Баланс</div>
-        <div id="balance" class="balance-amount">10000</div>
+        <div id="balance" class="balance-amount">10000 🪙</div>
       </div>
       <div class="panel-box">
         <div class="panel-label">Ставка</div>
@@ -115,8 +115,10 @@
     }
 
     function updateDisplay() {
-      document.getElementById('balance').innerText = balance + " 🪙";
-      document.getElementById('betDisplay').innerText = currentBet;
+      const balanceEl = document.getElementById('balance');
+      const betEl = document.getElementById('betDisplay');
+      if (balanceEl) balanceEl.innerText = balance + " 🪙";
+      if (betEl) betEl.innerText = currentBet;
     }
 
     function adjustBet(amount) {
@@ -208,5 +210,4 @@
       updateDisplay();
     }
 
-    // Инициализация при загрузке и скрытие заставки
-    window.onload = function() {
+    // Инициализация и железное скрытие заставки
