@@ -3,16 +3,71 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Мой проект на GitHub</title>
-  <!-- Подключение внешних стилей (опционально) -->
-  <link rel="stylesheet" href="style.css">
+  <title>Слот-машина</title>
+  <style>
+    body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background: #222; color: white; margin: 0; }
+    .slot-machine { display: flex; border: 4px solid gold; border-radius: 10px; background: #333; padding: 20px; gap: 15px; margin-bottom: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+    .reel { width: 80px; height: 80px; border: 2px solid #555; border-radius: 5px; background: #fff; color: #000; font-size: 3rem; display: flex; align-items: center; justify-content: center; box-shadow: inset 0 0 10px rgba(0,0,0,0.5); }
+    button { padding: 12px 35px; font-size: 1.3rem; background: gold; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+    button:hover { background: orange; transform: scale(1.05); }
+    #message { font-size: 1.5rem; height: 2rem; color: lime; font-weight: bold; text-align: center; }
+  </style>
 </head>
 <body>
 
-  <h1>Привет, GitHub!</h1>
-  <p>Это пример простейшей HTML-страницы.</p>
+  <h1 style="color: gold; margin-bottom: 30px;">🎰 Слот-Машина 🎰</h1>
 
-  <!-- Подключение скриптов (опционально) -->
-  <script src="script.js"></script>
+  <div class="slot-machine">
+    <div class="reel" id="reel1">7️⃣</div>
+    <div class="reel" id="reel2">7️⃣</div>
+    <div class="reel" id="reel3">7️⃣</div>
+  </div>
+
+  <button onclick="spin()">Крутить!</button>
+  <p id="message"></p>
+
+  <script>
+    const symbols = ['🍒', '🍋', '🍇', '🍉', '⭐', '7️⃣'];
+    
+    function getRandomSymbol() {
+      return symbols[Math.floor(Math.random() * symbols.length)];
+    }
+
+    function spin() {
+      document.getElementById('message').innerText = "Крутим...";
+      document.getElementById('message').style.color = "lightgray";
+      
+      let count = 0;
+      const interval = setInterval(() => {
+        const s1 = getRandomSymbol();
+        const s2 = getRandomSymbol();
+        const s3 = getRandomSymbol();
+        
+        document.getElementById('reel1').innerText = s1;
+        document.getElementById('reel2').innerText = s2;
+        document.getElementById('reel3').innerText = s3;
+        
+        count++;
+        if (count > 12) { 
+          clearInterval(interval);
+          checkWin(s1, s2, s3);
+        }
+      }, 90);
+    }
+
+    function checkWin(s1, s2, s3) {
+      const msg = document.getElementById('message');
+      if (s1 === s2 && s2 === s3) {
+        msg.innerText = `🎉 ДЖЕКПОТ! Вы выиграли! 🎉`;
+        msg.style.color = "lime";
+      } else if (s1 === s2 || s2 === s3 || s1 === s3) {
+        msg.innerText = `👍 Малая победа! 2 совпадения.`;
+        msg.style.color = "orange";
+      } else {
+        msg.innerText = `❌ Попробуйте еще раз.`;
+        msg.style.color = "red";
+      }
+    }
+  </script>
 </body>
 </html>
