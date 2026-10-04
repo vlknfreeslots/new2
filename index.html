@@ -147,10 +147,6 @@
     const maxBet = 500;
     const minBet = 100;
     let isSpinning = false;
-    
-    // Мгновенно отрисовываем стартовый баланс без ожидания событий загрузки
-    document.getElementById('balance').innerText = balance + " 🪙";
-    document.getElementById('betDisplay').innerText = currentBet;
 
     function getRandomSymbol() {
       return symbols[Math.floor(Math.random() * symbols.length)];
@@ -250,3 +246,10 @@
           } else {
             msg.innerText = `🎉 КОМБО! +${winAmount} 🪙`;
             msg.style.color = "#ffaa00";
+            msg.style.textShadow = "0 0 15px #ffaa00";
+          }
+        }
+      } else if (s1 === s2 || s2 === s3 || s1 === s3) {
+        winAmount = Math.floor(currentBet * 1.5);
+        balance += winAmount;
+        if (msg) {
