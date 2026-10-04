@@ -171,14 +171,14 @@
           msg.style.textShadow = "0 0 15px #ffaa00";
         }
       } else if (s1 === s2 || s2 === s3 || s1 === s3) {
-        // Два совпадения
+        // Два совпадения (Восстановленная логика)
         winAmount = Math.floor(currentBet * 1.5);
         balance += winAmount;
         msg.innerText = `✨ Выигрыш! +${winAmount} 🪙`;
         msg.style.color = "#ffdd00";
         msg.style.textShadow = "0 0 10px #ffdd00";
       } else {
-        // Проигрыш
+        // Проигрыш (Восстановленная логика)
         msg.innerText = `Увы, попробуйте еще раз!`;
         msg.style.color = "#ff3333";
         msg.style.textShadow = "none";
@@ -187,7 +187,7 @@
       updateDisplay();
     }
 
-    // Первичная инициализация при загрузке страницы
+    // Инициализация отображения при старте
     updateDisplay();
   </script>
 </body>
