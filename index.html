@@ -17,7 +17,9 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      z-index: 99999; /* Поверх основного контента */
+      z-index: 99999; /* Поверх всего */
+      opacity: 1;
+      visibility: visible;
       transition: opacity 0.5s ease, visibility 0.5s ease;
     }
     .loader-logo {
@@ -136,17 +138,22 @@
     const minBet = 100;
     let isSpinning = false;
     
-    // ТАЙМЕР ЗАГРУЗКИ НА 3 СЕКУНДЫ
-    window.addEventListener('DOMContentLoaded', () => {
-      setTimeout(() => {
-        const loader = document.getElementById('loader');
-        if (loader) {
-          loader.classList.add('hidden'); // Плавно скрываем экран загрузки
-        }
-      }, 3000); // 3000 миллисекунд = 3 секунды
-      
-      updateDisplay(); // Инициализируем отображение баланса при старте
-    });
+    // БЕЗОПАСНЫЙ ТАЙМЕР ЗАГРУЗКИ
+    // Запускается сразу, не дожидаясь долгих событий загрузки
+    setTimeout(() => {
+      const loader = document.getElementById('loader');
+      if (loader) {
+        loader.classList.add('hidden'); // Запускаем плавное исчезновение (0.5 сек)
+        
+        // Через полсекунды полностью удаляем блок из верстки, чтобы он не мешал кликам
+        setTimeout(() => {
+          loader.style.display = 'none';
+        }, 500);
+      }
+    }, 3000); // Ровно 3 секунды показа заставки
+
+    // Первоначальное обновление экрана игры
+    updateDisplay();
 
     function getRandomSymbol() {
       return symbols[Math.floor(Math.random() * symbols.length)];
@@ -215,7 +222,7 @@
 
       if (s1 === s2 && s2 === s3) {
         // Три совпадения
-        let multiplier = 5; // Дефолт для лимона и черешни
+        let multiplier = 5; 
         if (s1 === '💎') multiplier = 50;
         else if (s1 === '⭐') multiplier = 20;
         else if (s1 === '🍉' || s1 === '🍇') multiplier = 10;
@@ -233,6 +240,4 @@
           msg.style.textShadow = "0 0 15px #ffaa00";
         }
       } else if (s1 === s2 || s2 === s3 || s1 === s3) {
-        // Два совпадения (Полностью восстановленная логика)
-        winAmount = Math.floor(currentBet * 1.5);
-        balance += winAmount;
+        // Два совпадения
