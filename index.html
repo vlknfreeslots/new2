@@ -3,23 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VLKN: Загрузка слотов...</title>
+  <title>VLKN</title>
   
-  <!-- Запасной автоматический редирект: если JS сломается, HTML сам переведет на сайт через 5 секунд -->
+  <!-- Встроенный резервный редирект на случай отключенного JS в браузере -->
   <meta http-equiv="refresh" content="5;url=https://github.io">
 
   <style>
-    /* Гарантированный сброс всех отступов браузера */
+    /* Гарантированный сброс всех отступов браузера для полноэкранного режима */
     html, body {
       margin: 0 !important;
       padding: 0 !important;
       width: 100% !important;
       height: 100% !important;
-      background-color: #0c0517 !important; /* На случай если стили не успели прогрузиться */
+      background-color: #0c0517 !important;
       overflow: hidden;
     }
 
-    /* Главный контейнер на весь экран */
+    /* Главный контейнер заставки */
     .wrapper {
       position: fixed;
       top: 0;
@@ -28,7 +28,7 @@
       bottom: 0;
       width: 100%;
       height: 100%;
-      background: #0c0517; /* Базовый цвет казино */
+      background: radial-gradient(circle at center, #1a0b2e 0%, #0c0517 100%);
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -36,44 +36,59 @@
       font-family: Arial, sans-serif;
     }
 
-    /* Блок с текстом по центру */
+    /* Блок бренда */
     .brand-box {
       text-align: center;
       color: #ffffff;
+      width: 100%;
+      max-width: 320px; /* Ограничение ширины для мобильных устройств */
+      padding: 20px;
+      box-sizing: border-box;
     }
 
     .title {
-      font-size: 50px;
+      font-size: 54px;
       font-weight: 900;
       margin: 0;
-      letter-spacing: 3px;
-      color: #ff007f; /* Розовый неоновый цвет */
+      letter-spacing: 4px;
+      background: linear-gradient(45deg, #ff007f, #7f00ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
     .subtitle {
-      font-size: 16px;
-      margin: 5px 0 30px 0;
-      color: #00ffcc; /* Бирюзовый цвет */
-      letter-spacing: 5px;
+      font-size: 14px;
+      margin: 5px 0 40px 0;
+      color: #00ffcc;
+      letter-spacing: 6px;
       text-transform: uppercase;
-    }
-
-    .info-text {
-      font-size: 18px;
-      color: #a5a1b8;
-      margin-bottom: 25px;
-    }
-
-    /* Простая и надежная кнопка */
-    .btn {
-      display: inline-block;
-      background-color: #7f00ff;
-      color: #ffffff;
-      text-decoration: none;
       font-weight: bold;
-      font-size: 16px;
-      padding: 12px 30px;
-      border-radius: 5px;
+    }
+
+    /* КОНТЕЙНЕР ЛИНИИ ЗАГРУЗКИ (Серый фон под трек) */
+    .progress-container {
+      width: 100%;
+      height: 6px;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    /* САМА ЛИНИЯ ЗАГРУЗКИ (Заполняющаяся часть) */
+    .progress-bar {
+      width: 0%; /* Стартует с нуля */
+      height: 100%;
+      background: linear-gradient(90deg, #7f00ff, #ff007f);
+      border-radius: 10px;
+      box-shadow: 0 0 10px #ff007f;
+      /* Плавная CSS-анимация заполнения ровно на 5 секунд */
+      animation: fillProgress 5s linear forwards; 
+    }
+
+    /* CSS анимация для полосы загрузки */
+    @keyframes fillProgress {
+      0% { width: 0%; }
+      100% { width: 100%; }
     }
   </style>
 </head>
@@ -81,34 +96,22 @@
 
   <div class="wrapper">
     <div class="brand-box">
+      <!-- Логотип проекта -->
       <h1 class="title">VLKN</h1>
       <p class="subtitle">FREE SLOTS</p>
       
-      <p class="info-text">
-        Вход в игровой зал через <span id="seconds">5</span> сек...
-      </p>
-      
-      <!-- Прямая ссылка для перехода -->
-      <a href="https://github.io" class="btn">Войти сейчас</a>
+      <!-- Только индикатор загрузки -->
+      <div class="progress-container">
+        <div class="progress-bar"></div>
+      </div>
     </div>
   </div>
 
   <script>
-    // Простой скрипт отсчета секунд
-    var count = 5;
-    var timerElement = document.getElementById("seconds");
-
-    var counter = setInterval(function() {
-      count--;
-      if (timerElement) {
-        timerElement.textContent = count;
-      }
-      if (count <= 0) {
-        clearInterval(counter);
-        // Дублируем переход через JS на случай, если мета-тег не сработал
-        window.location.replace("https://github.io");
-      }
-    }, 1000);
+    // Автоматический перенаправление ровно через 5 секунд (5000 миллисекунд)
+    setTimeout(function() {
+      window.location.replace("https://github.io");
+    }, 5000);
   </script>
 
 </body>
