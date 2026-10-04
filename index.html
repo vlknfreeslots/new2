@@ -47,7 +47,7 @@
   <div class="dashboard">
     <div class="panel-box">
       <div class="panel-label">Баланс</div>
-      <div id="balance" class="balance-amount">10000</div>
+      <div id="balance" class="balance-amount">10000 🪙</div>
     </div>
     <div class="panel-box">
       <div class="panel-label">Ставка</div>
@@ -174,21 +174,17 @@
         // Два совпадения (Восстановленная логика)
         winAmount = Math.floor(currentBet * 1.5);
         balance += winAmount;
-        msg.innerText = `✨ Выигрыш! +${winAmount} 🪙`;
-        msg.style.color = "#ffdd00";
-        msg.style.textShadow = "0 0 10px #ffdd00";
+        msg.innerText = `✨ Совпадение двух! +${winAmount} 🪙`;
+        msg.style.color = "#45f3ff";
+        msg.style.textShadow = "0 0 10px rgba(69, 243, 255, 0.6)";
       } else {
-        // Проигрыш (Восстановленная логика)
-        msg.innerText = `Увы, попробуйте еще раз!`;
-        msg.style.color = "#ff3333";
-        msg.style.textShadow = "none";
+        // Проигрыш
+        msg.innerText = "Попробуйте еще раз!";
+        msg.style.color = "#ff007f";
+        msg.style.textShadow = "0 0 10px rgba(255, 0, 127, 0.4)";
       }
-      
       updateDisplay();
     }
-
-    // Инициализация отображения при старте
-    updateDisplay();
   </script>
 </body>
 </html>
