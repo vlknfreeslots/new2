@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>VLKN: free slots</title>
   <style>
-    /* АБСОЛЮТНО АВТОНОМНАЯ CSS-ЗАСТАВКА (БЕЗ JS) */
+    /* АБСОЛЮТНО ОТКАЗОУСТОЙЧИВАЯ CSS-ЗАСТАВКА */
     #loader {
       position: fixed;
       top: 0;
@@ -19,25 +19,26 @@
       align-items: center;
       z-index: 999999;
       
-      /* Запускаем анимацию: 3 секунды держим экран, затем 0.4 секунды плавно растворяем и убираем */
-      animation: destroyLoader 0.4s ease 3s forwards;
+      /* Анимация: 3 секунды держим экран, затем 0.4 секунды убираем */
+      animation: destroyLoaderFully 0.4s ease 3s forwards;
     }
     
-    @keyframes destroyLoader {
+    @keyframes destroyLoaderFully {
       0% {
         opacity: 1;
-        transform: scale(1);
-        z-index: 999999;
+        transform: translateY(0) scale(1);
       }
       99% {
         opacity: 0;
-        transform: scale(1);
-        z-index: 999999;
+        transform: translateY(0) scale(0.5);
       }
       100% {
         opacity: 0;
-        transform: scale(0); /* Схлопываем заставку в нулевой размер */
-        z-index: -1;        /* Уводим её на самый задний план под игру */
+        /* ФИЗИЧЕСКИ КАТАПУЛЬТИРУЕМ ЗАСТАВКУ ДАЛЕКО ЗА ПРЕДЕЛЫ ЭКРАНА */
+        transform: translateY(-99999px) scale(0);
+        width: 0;
+        height: 0;
+        z-index: -100;
       }
     }
 
@@ -147,7 +148,7 @@
     const minBet = 100;
     let isSpinning = false;
     
-    // Инициализация стартовых значений
+    // Мгновенно отрисовываем стартовый баланс без ожидания событий загрузки
     document.getElementById('balance').innerText = balance + " 🪙";
     document.getElementById('betDisplay').innerText = currentBet;
 
@@ -249,5 +250,3 @@
           } else {
             msg.innerText = `🎉 КОМБО! +${winAmount} 🪙`;
             msg.style.color = "#ffaa00";
-            msg.style.textShadow = "0 0 15px #ffaa00";
-          }
