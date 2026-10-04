@@ -1,25 +1,22 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" style="background-color: #0c0517 !important;">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>VLKN</title>
-  
-  <!-- Резервный автоматический редирект на указанный сайт -->
-  <meta http-equiv="refresh" content="5;url=https://vlknfreeslots.github.io/new/">
 
   <style>
-    /* Полный сброс отступов браузера для отображения строго на весь экран */
+    /* БЛОКИРОВКА БЕЛОГО ЭКРАНА: Жестко задаем темный фон казино */
     html, body {
       margin: 0 !important;
       padding: 0 !important;
       width: 100% !important;
       height: 100% !important;
-      background-color: #0c0517 !important;
-      overflow: hidden;
+      background-color: #0c0517 !important; 
+      overflow: hidden !important;
     }
 
-    /* Главный полноэкранный контейнер заставки */
+    /* ПОЛНОЭКРАННЫЙ КОНТЕЙНЕР ЗАСТАВКИ */
     .wrapper {
       position: fixed;
       top: 0;
@@ -34,6 +31,7 @@
       justify-content: center;
       align-items: center;
       font-family: Arial, sans-serif;
+      z-index: 999999;
     }
 
     /* Блок логотипа и индикатора */
@@ -74,7 +72,7 @@
       overflow: hidden;
     }
 
-    /* Заполняющаяся линия (анимация ровно на 5 секунд) */
+    /* Заполняющаяся неоновая линия */
     .progress-bar {
       width: 0%;
       height: 100%;
@@ -84,7 +82,7 @@
       animation: fillProgress 5s linear forwards; 
     }
 
-    /* Описание анимации движения линии */
+    /* Анимация заполнения линии ровно за 5 секунд */
     @keyframes fillProgress {
       0% { width: 0%; }
       100% { width: 100%; }
@@ -107,10 +105,13 @@
   </div>
 
   <script>
-    // Основной автоматический переход через 5 секунд (5000 миллисекунд)
-    setTimeout(function() {
-      window.location.replace("https://vlknfreeslots.github.io/new/");
-    }, 5000);
+    // Запуск таймера перенаправления после полной готовности интерфейса заставки
+    window.addEventListener('DOMContentLoaded', function() {
+      setTimeout(function() {
+        // Безопасный редирект на ваш сайт без сохранения заглушки в истории «Назад»
+        window.location.replace("https://vlknfreeslots.github.io/new/");
+      }, 5000); // Ожидание 5000 миллисекунд (5 секунд)
+    });
   </script>
 
 </body>
