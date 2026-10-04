@@ -19,26 +19,17 @@
       align-items: center;
       z-index: 999999;
       
-      /* Анимация: 3 секунды держим экран, затем 0.4 секунды убираем */
-      animation: destroyLoaderFully 0.4s ease 3s forwards;
+      /* Анимация: 3 секунды держим экран, затем 0.3 секунды убираем */
+      animation: destroyLoaderFully 0.3s ease 3s forwards;
     }
     
     @keyframes destroyLoaderFully {
       0% {
         opacity: 1;
-        transform: translateY(0) scale(1);
-      }
-      99% {
-        opacity: 0;
-        transform: translateY(0) scale(0.5);
       }
       100% {
         opacity: 0;
-        /* ФИЗИЧЕСКИ КАТАПУЛЬТИРУЕМ ЗАСТАВКУ ДАЛЕКО ЗА ПРЕДЕЛЫ ЭКРАНА */
-        transform: translateY(-99999px) scale(0);
-        width: 0;
-        height: 0;
-        z-index: -100;
+        visibility: hidden;
       }
     }
 
@@ -75,6 +66,8 @@
     .balance-amount { color: #00ffcc; font-size: 1.4rem; font-weight: bold; text-shadow: 0 0 10px rgba(0, 255, 204, 0.4); }
     
     .bet-control { display: flex; align-items: center; gap: 10px; margin-top: 2px; }
+    
+    /* Добавлены ID для безопасного поиска кнопок */
     .bet-btn { background: #1f2833; border: 1px solid #00d2ff; color: #00d2ff; font-weight: bold; font-size: 1.2rem; width: 30px; height: 30px; border-radius: 5px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
     .bet-btn:hover { background: #00d2ff; color: #1f2833; }
     .bet-amount { font-size: 1.3rem; min-width: 50px; font-weight: bold; }
@@ -115,9 +108,10 @@
     <div class="panel-box">
       <div class="panel-label">Ставка</div>
       <div class="bet-control">
-        <button class="bet-btn" onclick="adjustBet(-100)">-</button>
+        <!-- Убраны старые атрибуты onclick, добавлены понятные ID -->
+        <button class="bet-btn" id="btnBetMinus">-</button>
         <span id="betDisplay" class="bet-amount">100</span>
-        <button class="bet-btn" onclick="adjustBet(100)">+</button>
+        <button class="bet-btn" id="btnBetPlus">+</button>
       </div>
     </div>
   </div>
@@ -128,7 +122,8 @@
     <div class="reel" id="reel3">💎</div>
   </div>
 
-  <button id="spinBtn" class="spin-btn" onclick="spin()">Испытать удачу</button>
+  <!-- Убран атрибут onclick -->
+  <button id="spinBtn" class="spin-btn">Испытать удачу</button>
   <p id="message"></p>
 
   <div class="paytable">
@@ -141,6 +136,14 @@
   </div>
 
   <script>
+    // ГАРАНТИРОВАННОЕ ФИЗИЧЕСКОЕ УДАЛЕНИЕ ЗАСТАВКИ
+    setTimeout(function() {
+      var loader = document.getElementById('loader');
+      if (loader) {
+        loader.remove(); // Полностью стираем элемент из HTML-кода, чтобы его не было физически
+      }
+    }, 3300);
+
     const symbols = ['🍒', '🍋', '🍇', '🍉', '⭐', '💎'];
     let balance = 10000;
     let currentBet = 100;
@@ -250,6 +253,3 @@
           }
         }
       } else if (s1 === s2 || s2 === s3 || s1 === s3) {
-        winAmount = Math.floor(currentBet * 1.5);
-        balance += winAmount;
-        if (msg) {
